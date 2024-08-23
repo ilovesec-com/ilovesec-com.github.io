@@ -1,6 +1,6 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: ilovesec - Information Security
+  site: 'https://ilovesec-com.github.io'
   base: '/'
   trailingSlash: false
 
