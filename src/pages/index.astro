@@ -11,6 +11,8 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Image } from 'astro:assets';
+import logoimage from '../../images/logo.png';
 
 const metadata = {
   title: 'ilovesec - Information Security and Introspection',
@@ -33,7 +35,7 @@ const metadata = {
     ]}
  
   >
-image={{ src: '~/assets/images/logo.png', alt: 'ilovesec logo' }}
+<img src={logoimage.src} />
     <Fragment slot="title">
       <span class="text-accent dark:text-white highlight">ilovesec</span> - a website for information security
     </Fragment>
