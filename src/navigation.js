@@ -12,8 +12,12 @@ export const headerData = {
       text: 'About Us', href: getPermalink('/homes/personal'),
       links: [
         {
-          text: 'Resume',
-          href: getPermalink('/homes/personal/#resume'),
+          text: 'About Joshua',
+          href: getPermalink('/homes/personal'),
+        },
+        {
+          text: 'Skills',
+          href: getPermalink('/homes/personal/#skills'),
         },
         {
           text: 'Portfolio',
