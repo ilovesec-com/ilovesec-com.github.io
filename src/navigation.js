@@ -23,16 +23,16 @@ export const headerData = {
       links: [
         {
           text: 'Resume',
-          href: getPermalink('/personal/#resume'),
+          href: getPermalink('/homes/personal/#resume'),
         },
         {
           text: 'Portfolio',
-          href: getPermalink('/personal/#portfolio'),
+          href: getPermalink('/homes/personal/#portfolio'),
         },
       ],
     },
     {
-      text: 'Blog', href: getBlogPermalink(),
+      text: 'Blog', href: '/blog',
     },
   ],
   actions: [{ text: 'Blog', href: getBlogPermalink(), target: '_blank' }],
