@@ -25,13 +25,13 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'ilovesec',
-        href: 'https://www.ilovesec.com',
+        text: 'Blog Posts',
+        href: '/blog/',
         target: '_blank',
            },
-      { text: 'Learn more', href: '#features' },
+      { text: 'Services', href: '#features' },
     ]}
-    image={{ src: '~/assets/images/logo.png', alt: 'ilovesec logo',  height: '768', width: '768', }}
+    image={{ src: '~/assets/images/logo.jpg', alt: 'ilovesec logo',  height: '768', width: '768', }}
   >
     <Fragment slot="title">
       <span class="text-accent dark:text-white highlight">ilovesec</span> - a website for information security
@@ -43,10 +43,4 @@ const metadata = {
 
     </Fragment>
   </Hero>
-<CallToAction>
-    <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
-    </Fragment>
-  </CallToAction>
 </Layout>
