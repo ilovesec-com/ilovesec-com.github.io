@@ -6,17 +6,7 @@ export const headerData = {
       text: 'Home', href: '/'
     },
     {
-      text: 'Pages',
-      links: [
-        {
-          text: 'Services',
-          href: getPermalink('/services'),
-        },
-        {
-          text: 'Contact',
-          href: getPermalink('/contact'),
-        },
-      ],
+      text: 'Contact Us', href: getPermalink('/contact'),
     },
     {
       text: 'About Us', href: getPermalink('/homes/personal'),
@@ -47,9 +37,7 @@ export const footerData = {
 
   ],
   socialLinks: [
-    { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
-    { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: '#' },
-    { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
+    { ariaLabel: 'X', icon: 'tabler:brand-x', href: 'https://www.twitter.com/samunoskex' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/samunoske' },
   ],

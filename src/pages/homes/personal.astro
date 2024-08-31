@@ -25,21 +25,15 @@ const metadata = {
       text: 'Home', href: '/'
     },
     {
-      text: 'Pages',
-      links: [
-        {
-          text: 'Services',
-          href: getPermalink('/services'),
-        },
-        {
-          text: 'Contact',
-          href: getPermalink('/contact'),
-        },
-      ],
+      text: 'Contact Us', href: getPermalink('/contact'),
     },
     {
-      text: 'About Me', href: getPermalink('/homes/personal'),
+      text: 'About Us', href: getPermalink('/homes/personal'),
       links: [
+        {
+          text: 'About Me',
+          href: getPermalink('/personal'),
+        },
         {
           text: 'Resume',
           href: getPermalink('/personal/#resume'),
