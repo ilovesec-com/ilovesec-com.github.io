@@ -20,6 +20,16 @@ export const headerData = {
     },
     {
       text: 'About Me', href: getPermalink('/homes/personal'),
+      links: [
+        {
+          text: 'Resume',
+          href: getPermalink('/personal/#resume'),
+        },
+        {
+          text: 'Portfolio',
+          href: getPermalink('/personal/#portfolio'),
+        },
+      ],
     },
     {
       text: 'Blog', href: getBlogPermalink(),
