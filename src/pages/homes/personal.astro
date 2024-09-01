@@ -35,6 +35,10 @@ const metadata = {
           href: getPermalink('/homes/personal/#about'),
         },
         {
+          text: 'Security Community Highlights',
+          href: getPermalink('/homes/personal/#highlights'),
+        },
+        {
           text: 'Skills',
           href: getPermalink('/homes/personal/#skills'),
         },
@@ -149,18 +153,71 @@ const metadata = {
     items={[
       {
         title:
-          'Blue Team Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2023-2024</span>',
+          'Packet Hacking Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2021-Present</span>',
+        description: `DEF CON 32 (2024): Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br />DEF CON 31 (2023): Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /> DEF CON 30 (2022): Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br />DEF CON 29 (2021): Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          'Blue Team Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
         description: `DEF CON 32 (2024): Project Obsidian Lead - Crafted questions for annual Capture the Flag for Project Obsidian. Assisted with documentation creation for backend processes within Project Obsidian operations.<br />DEF CON 31 (2023): Project Obsidian - Presented talk "(n)map Explorations" based on a Threat Hunt walkthrough. Assisted with Capture the Flag question generation.<br />DEF CON 30 (2022): Project Obsidian - Presented talk "Go Phish! Visualizing Basic Malice" based on a Threat Hunt walkthrough. `,
         icon: 'tabler:briefcase',
       },
       {
         title:
-          'Packet Hacking Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2024</span>',
-        description: `DEF CON 32 (2024): Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br />DEF CON 31 (2023): Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /> DEF CON 30 (2022): Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br />DEF CON 29 (2021): Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
+          '<span class="font-normal">GrrCON</span> <br /> <span class="text-sm font-normal">2023-Present</span>',
+        description: `GrrCON 2023: Volunteer Team - Track Operator <br />Supporting Talk Track 2 `,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          '<span class="font-normal">Wild West Hackin Fest</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
+        description: `Way West 2022: Volunteer Team - Moderator/Support for Resume Workshop Class`,
         icon: 'tabler:briefcase',
       },
     ]}
     classes={{ container: 'max-w-3xl' }}
+  />
+
+  <!-- Features3 Widget ************** -->
+
+  <Features3
+    title="Price-related features"
+    subtitle="Discover the advantages of choosing our plans"
+    columns={2}
+    items={[
+      {
+        title: 'Tiered Pricing Plans',
+        description: 'Choose from a range of pricing plans designed to accommodate different budgets and requirements.',
+        icon: 'tabler:stairs',
+      },
+      {
+        title: 'Transparent Pricing',
+        description: 'Clearly displayed pricing details for each plan, with no hidden costs or unexpected charges.',
+        icon: 'tabler:flip-vertical',
+      },
+      {
+        title: 'Secure Payment Methods',
+        description: 'Secure payment gateways to protect your financial information during transactions.',
+        icon: 'tabler:shield-lock',
+      },
+      {
+        title: 'Instant Access',
+        description: `Immediate access to your chosen plan's features and templates upon subscription.`,
+        icon: 'tabler:accessible',
+      },
+      {
+        title: 'Upgrade Value',
+        description: 'Upgrade to higher-tier plans to unlock more features and benefits for an enhanced experience.',
+        icon: 'tabler:chevrons-up',
+      },
+      {
+        title: '24H support',
+        description: 'Questions answered via live chat, email or phone, every calendar day.',
+        icon: 'tabler:headset',
+      },
+    ]}
+    classes={{ container: 'max-w-5xl' }}
   />
 
   <!-- Features3 Widget ************** -->

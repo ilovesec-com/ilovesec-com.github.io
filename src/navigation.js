@@ -16,6 +16,10 @@ export const headerData = {
           href: getPermalink('/homes/personal/#about'),
         },
         {
+          text: 'Security Community Highlights',
+          href: getPermalink('/homes/personal/#highlights'),
+        },
+        {
           text: 'Skills',
           href: getPermalink('/homes/personal/#skills'),
         },
