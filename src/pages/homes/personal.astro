@@ -77,31 +77,50 @@ const metadata = {
 
   <Content
     id="about"
-    columns={3}
+    columns={5}
     items={[
       {
-        icon: 'tabler:brand-dribbble',
+        icon: 'tabler:brand-x',
         callToAction: {
           target: '_blank',
-          text: 'Dribbble',
-          href: '#',
+          text: 'Twitter',
+          href: 'https://www.twitter.com/samunoskex',
         },
       },
       {
-        icon: 'tabler:brand-behance',
+        icon: 'tabler:brand-linkedin',
         callToAction: {
           target: '_blank',
-          text: 'Behance',
-          href: '#',
+          text: 'LinkedIn',
+          href:  'https://www.linkedin.com/in/thejoshuamorgan',
         },
       },
       {
-        icon: 'tabler:brand-pinterest',
+        icon: 'tabler:brand-mastodon',
         callToAction: {
           target: '_blank',
-          text: 'Pinterest',
-          href: '#',
+          text: 'Mastodon',
+          href: 'https://infosec.exchange/@Samunoske',
         },
+
+      },
+      {
+        icon: 'tabler:brand-bluesky',
+        callToAction: {
+          target: '_blank',
+          text: 'Bluesky',
+          href: 'https://bsky.app/profile/ilovesec.com',
+        },
+
+      },
+      {
+        icon: 'tabler:brand-github',
+        callToAction: {
+          target: '_blank',
+          text: 'Bluesky',
+          href: 'https://github.com/samunoske',
+        },
+
       },
     ]}
     image={{
@@ -165,19 +184,19 @@ const metadata = {
 
   <Content
     id="porfolio"
-    title="Elevating visual narratives"
-    subtitle="Embark on a design journey that surpasses pixels, entering a realm of imagination. Explore my portfolio, where passion and creativity converge to shape enthralling visual narratives."
+    title="My Projects"
+    subtitle="I work hard and I do some pretty cool stuff when I'm not working."
     isReversed
     items={[
       {
         title: 'Description:',
         description:
-          'Developed a comprehensive brand identity for a tech startup, Tech Innovators, specializing in disruptive innovations. The goal was to convey a modern yet approachable image that resonated with both corporate clients and tech enthusiasts.',
+          'Crafted questions for Blue Team Village's annual Capture the Flag (CTF). Provided support during preparation and launch of backend operations.',
       },
       {
         title: 'Role:',
         description:
-          'Led the entire branding process from concept to execution. Created a dynamic logo that symbolized innovation, selected a vibrant color palette, and I designed corporate stationery, website graphics, and social media assets.',
+          'Helped build the Capture the Flag material for DEF CONs 31 and 32. Served as a Lead for the project in 2024 and oversaw a successful launch for the 2024 version.',
       },
     ]}
     image={{
@@ -186,14 +205,14 @@ const metadata = {
     }}
     callToAction={{
       target: '_blank',
-      text: 'Go to the project',
+      text: 'Check out BTV',
       icon: 'tabler:chevron-right',
       href: '#',
     }}
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Project 1: <br /><span class="text-2xl">Brand identity for tech innovators</span>
+        Project 1: <br /><span class="text-2xl">Capture The Flag</span>
       </h3>
     </Fragment>
 
