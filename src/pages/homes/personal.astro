@@ -180,47 +180,6 @@ const metadata = {
     ]}
   />
 
-  <!-- Content Widget **************** -->
-
-  <Content
-    id="porfolio"
-    title="My Projects"
-    subtitle="I work hard and I do some pretty cool stuff when I'm not working."
-    isReversed
-    items={[
-      {
-        title: 'Description:',
-        description:
-          'Crafted questions for Blue Team Village's annual Capture the Flag. Provided support during preparation and launch of backend operations.',
-      },
-      {
-        title: 'Role:',
-        description:
-          'Helped build the Capture the Flag material for DEF CONs 31 and 32. Served as a Lead for the project in 2024 and oversaw a successful launch for the 2024 version.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1658248165252-71e116af1b34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=928&q=80',
-      alt: 'Tech Design Image',
-    }}
-    callToAction={{
-      target: '_blank',
-      text: 'Check out BTV',
-      icon: 'tabler:chevron-right',
-      href: '#',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Project 1: <br /><span class="text-2xl">Capture The Flag</span>
-      </h3>
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
   <!-- CallToAction Widget *********** -->
 
   <CallToAction
