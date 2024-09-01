@@ -6,10 +6,10 @@ export const headerData = {
       text: 'Home', href: '/'
     },
     {
-      text: 'Contact Us', href: getPermalink('/contact'),
+      text: 'Contact', href: getPermalink('/contact'),
     },
     {
-      text: 'About Us', href: getPermalink('/homes/personal'),
+      text: 'About', href: getPermalink('/homes/personal'),
       links: [
         {
           text: 'Bio',
@@ -37,11 +37,14 @@ export const footerData = {
 
   ],
   socialLinks: [
+    { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/thejoshuamorgan' },
+    { ariaLabel: 'Mastodon', icon: 'tabler:brand-mastodon', href: 'https://infosec.exchange/@Samunoske' },
+    { ariaLabel: 'Bluesky', icon: 'tabler:brand-bluesky', href: 'https://bsky.app/profile/ilovesec.com' },
     { ariaLabel: 'X', icon: 'tabler:brand-x', href: 'https://www.twitter.com/samunoskex' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/samunoske' },
   ],
   footNote: `
-  Made by onWidget
+  2024
   `,
 };

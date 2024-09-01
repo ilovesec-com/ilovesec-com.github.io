@@ -25,10 +25,10 @@ const metadata = {
       text: 'Home', href: '/'
     },
     {
-      text: 'Contact Us', href: getPermalink('/contact'),
+      text: 'Contact', href: getPermalink('/contact'),
     },
     {
-      text: 'About Us', href: getPermalink('/homes/personal'),
+      text: 'About', href: getPermalink('/homes/personal'),
       links: [
         {
           text: 'Bio',
@@ -175,7 +175,11 @@ const metadata = {
       },
     ]}
   />
+---
+import { YouTube } from 'astro-embed';
+---
 
+<YouTube id="TtRtkTzHVBU" />
   <!-- CallToAction Widget *********** -->
 
   <CallToAction
