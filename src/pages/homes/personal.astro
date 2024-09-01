@@ -50,8 +50,8 @@ const metadata = {
       ]}
       actions={[
         {
-          text: 'Hire me',
-          href: '#',
+          text: 'Contact me',
+          href: '/contact/',
         },
       ]}
       isSticky
@@ -65,11 +65,10 @@ const metadata = {
     id="hero"
     title="Joshua Morgan"
     tagline="Information Security Professional"
-    actions={[{ variant: 'primary', text: 'Hire me', href: getPermalink('/contact#form') }]}
+    actions={[{ variant: 'primary', text: 'Contact me', href: getPermalink('/contact#form') }]}
   >
     <Fragment slot="subtitle">
      <span class="hidden sm:inline">I am an Information Security Professional and Instructor.</span>
-<span class="hidden sm:inline"></span>
     </Fragment>
   </Hero>
 
@@ -130,45 +129,33 @@ const metadata = {
 
   <Features3
     title="Skills"
-    subtitle="Discover the proficiencies that allow me to bring imagination to life through design."
+    subtitle="Discover my skills"
     columns={3}
     defaultIcon="tabler:point-filled"
     items={[
       {
-        title: 'Graphic design',
-        description: 'Proficient in crafting visually appealing designs that convey messages effectively.',
+        title: 'SOC Runbook Design',
+        description: 'Creating and designing procedures aimed at increasing flexibility and efficiency within the Security Operations Center.',
       },
       {
-        title: 'Branding and identity',
-        description: 'Skilled at developing cohesive brand identities, including logos and brand guidelines.',
+        title: 'Incident Response and Investigation',
+        description: 'Responding to information security incidents and assisting with recovery efforts',
       },
       {
-        title: 'User-centered design',
-        description: 'Experienced in creating user-friendly interfaces and optimizing user experiences.',
+        title: 'SOC Automation',
+        description: 'Increasing productivity and throughput of SOC efforts with automated actions utilizing existing platforms.',
       },
       {
-        title: 'Adobe Creative Suite',
-        description: 'Skilled in using Photoshop, Illustrator, and InDesign to create and edit visual elements.',
+        title: 'Security Training',
+        description: 'Breaking down complex topics pertaining to security to help train new or existing staff.',
       },
       {
-        title: 'Typography',
-        description: 'Adept in selecting and manipulating typefaces to enhance design aesthetics.',
+        title: 'Vendor Management',
+        description: 'Building sustainable relationships with vendors to maximize return on investment.',
       },
       {
-        title: 'Color theory',
-        description: 'Proficient in using color to evoke emotions and enhance visual harmony.',
-      },
-      {
-        title: 'Print and digital design',
-        description: 'Knowledgeable in designing for both print materials and digital platforms.',
-      },
-      {
-        title: 'Attention to detail',
-        description: 'Diligent in maintaining precision and quality in all design work.',
-      },
-      {
-        title: 'Adaptability',
-        description: 'Quick to adapt to new design trends, technologies, and client preferences.',
+        title: 'Creative Solutions',
+        description: 'You might not have exactly what you need to do what you want to do. I can try to find a way to accomplish it with what you have.',
       },
     ]}
   />
@@ -177,35 +164,35 @@ const metadata = {
 
   <Content
     id="porfolio"
-    title="Elevating visual narratives"
-    subtitle="Embark on a design journey that surpasses pixels, entering a realm of imagination. Explore my portfolio, where passion and creativity converge to shape enthralling visual narratives."
+    title="My Projects"
+    subtitle="Outside of work, I do some pretty cool things. Here are a few of the things I've been up to."
     isReversed
     items={[
       {
         title: 'Description:',
         description:
-          'Developed a comprehensive brand identity for a tech startup, Tech Innovators, specializing in disruptive innovations. The goal was to convey a modern yet approachable image that resonated with both corporate clients and tech enthusiasts.',
+          'Crafted questions for Blue Team Village's annual Capture the Flag (CTF). Provided support during preparation and launch of backend operations.',
       },
       {
         title: 'Role:',
         description:
-          'Led the entire branding process from concept to execution. Created a dynamic logo that symbolized innovation, selected a vibrant color palette, and I designed corporate stationery, website graphics, and social media assets.',
+          'Helped build the Capture the Flag material for DEF CONs 31 and 32. Served as a Lead for the project in 2024 and oversaw a successful launch for the 2024 version',
       },
     ]}
     image={{
       src: 'https://images.unsplash.com/photo-1658248165252-71e116af1b34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=928&q=80',
-      alt: 'Tech Design Image',
+      alt: 'Blue Team Village',
     }}
     callToAction={{
       target: '_blank',
       text: 'Go to the project',
       icon: 'tabler:chevron-right',
-      href: '#',
+      href: 'https://dc32.blueteamvillage.org/',
     }}
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Project 1: <br /><span class="text-2xl">Brand identity for tech innovators</span>
+        Project 1: <br /><span class="text-2xl">Blue Team Village - DEF CON</span>
       </h3>
     </Fragment>
 
@@ -223,11 +210,11 @@ const metadata = {
       {
         title: 'Description:',
         description:
-          'Designed a captivating event poster for an art and music festival, "ArtWave Fusion," aiming to showcase the synergy between visual art and music genres.',
+          'Presented at DEF CON conferences in 2022 and 2023. ',
       },
       {
         title: 'Role:',
-        description: `Translated the festival's creative theme into a visually striking poster. Used bold typography, vibrant colors, and abstract elements to depict the fusion of art and music. Ensured the design captured the festival's vibrant atmosphere.`,
+        description: `Presented as part of the Blue Team Village's Threat Hunting program for Project Obsidian..`,
       },
     ]}
     image={{
@@ -236,51 +223,14 @@ const metadata = {
     }}
     callToAction={{
       target: '_blank',
-      text: 'Go to the project',
+      text: 'Check out My Videos',
       icon: 'tabler:chevron-right',
       href: '#',
     }}
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Project 2: <br /><span class="text-2xl">Event poster for art & music festival</span>
-      </h3>
-    </Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent={true}
-    items={[
-      {
-        title: 'Description:',
-        description: `Redesigned the e-commerce website for an eco-conscious fashion brand, GreenVogue. The objective was to align the brand's online presence with its sustainable ethos and improve user experience.`,
-      },
-      {
-        title: 'Role:',
-        description: `Conducted a thorough analysis of the brand's values and customer base to inform the design direction. Created a visually appealing interface with intuitive navigation, highlighting sustainable materials, and integrating a user-friendly shopping experience.`,
-      },
-    ]}
-    image={{
-      src: 'https://plus.unsplash.com/premium_photo-1683288295841-782fa47e4770?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-      alt: 'Fashion e-commerce Image',
-    }}
-    callToAction={{
-      target: '_blank',
-      text: 'Go to the project',
-      icon: 'tabler:chevron-right',
-      href: '#',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        Project 3: <br /><span class="text-2xl">E-commerce website redesign for fashion brand</span>
+        Project 2: <br /><span class="text-2xl">Presenting at Security Conferences</span>
       </h3>
     </Fragment>
 
