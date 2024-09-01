@@ -31,12 +31,12 @@ const metadata = {
       text: 'About Us', href: getPermalink('/homes/personal'),
       links: [
         {
-          text: 'About',
-          href: getPermalink('/homes/personal'),
+          text: 'Bio',
+          href: getPermalink('/homes/personal/#about'),
         },
         {
           text: 'Skills',
-          href: getPermalink('/homes/personal/#Skills'),
+          href: getPermalink('/homes/personal/#skills'),
         },
       ],
     },
@@ -125,7 +125,7 @@ const metadata = {
       loading: 'eager',
     }}
   >
-    <Fragment slot="content">
+    <Fragment slot="content" id="about">
       <h2 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">About me</h2>
 <p>As a highly experienced Information Security Professional, I have a wealth of knowledge from working in high-level Security Operations Centers. I hold a Master of Science in Cybersecurity and Information Assurance. I have also had the opportunity to present at DEF CON security conferences. </p>
 <br class="hidden md:inline" />
@@ -142,9 +142,9 @@ const metadata = {
   </Content>
 
   <!-- Features3 Widget ************** -->
-
   <Features3
     title="Skills"
+    id="skills"
     subtitle="Discover my skills"
     columns={3}
     defaultIcon="tabler:point-filled"
