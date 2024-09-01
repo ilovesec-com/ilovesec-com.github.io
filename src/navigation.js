@@ -20,6 +20,10 @@ export const headerData = {
           href: getPermalink('/homes/personal/#highlights'),
         },
         {
+          text: 'Security Certifications',
+          href: getPermalink('/homes/personal/#certs'),
+        },
+        {
           text: 'Skills',
           href: getPermalink('/homes/personal/#skills'),
         },
