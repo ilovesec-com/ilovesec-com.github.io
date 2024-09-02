@@ -10,6 +10,8 @@ import Testimonials from '~/components/widgets/Testimonials.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import { getPermalink } from '~/utils/permalinks';
+import Logo from '~/components/Logo.astro';
+import { YouTube, Tweet, Vimeo } from 'astro-embed';
 
 const metadata = {
   title: 'Joshua Morgan - Information Security Professional and Instructor',
@@ -158,13 +160,13 @@ const metadata = {
       {
         title:
           'Packet Hacking Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2021-Present</span>',
-        description: `DEF CON 32 (2024):<br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br />DEF CON 31 (2023):<br />Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br />DEF CON 30 (2022):<br />Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br />DEF CON 29 (2021):<br />Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
+        description: `<b>DEF CON 32 (2024):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br /><b>DEF CON 31 (2023):</b><br />Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /><b>DEF CON 30 (2022):</b><br />Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br /><b>DEF CON 29 (2021):</b><br />Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
         icon: 'tabler:briefcase',
       },
       {
         title:
           'Blue Team Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
-        description: `<b>DEF CON 32 (2024):</b> Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br />Assisted with documentation creation for backend processes within Project Obsidian operations.<br />DEF CON 31 (2023)<br />Project Obsidian <br />Presented talk "(n)map Explorations" based on a Threat Hunt walkthrough.<br />Assisted with Capture the Flag question generation.<br />DEF CON 30 (2022):<br />Project Obsidian<br />Presented talk "Go Phish! Visualizing Basic Malice" based on a Threat Hunt walkthrough.`,
+        description: `<b>DEF CON 32 (2024):</b> Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br />Assisted with documentation creation for backend processes within Project Obsidian operations.<br /><b>DEF CON 31 (2023)</b><br />Project Obsidian <br />Presented talk "(n)map Explorations" based on a Threat Hunt walkthrough.<br />Assisted with Capture the Flag question generation.<br /><b>DEF CON 30 (2022):</b><br />Project Obsidian<br />Presented talk "Go Phish! Visualizing Basic Malice" based on a Threat Hunt walkthrough.<br /><YouTube id="oXlCyvFed6Q" />`,
         icon: 'tabler:briefcase',
       },
       {
@@ -176,13 +178,13 @@ const metadata = {
       {
         title:
           'Volunteer Staff <span class="font-normal"><br />Wild West Hackin Fest</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
-        description: `Way West 2022:<br /> Volunteer Team<br />Moderator/Support for Resume Workshop Class`,
+        description: `<b>Way West 2022:</b><br /> Volunteer Team<br />Moderator/Support for Resume Workshop Class`,
         icon: 'tabler:briefcase',
       },
       {
         title:
           'Volunteer Staff <span class="font-normal"><br />ShellCon</span> <br /> <span class="text-sm font-normal">2021</span>',
-        description: `ShellCon 2021<br /> Volunteer Team <br />Moderator/Support for Resume Workshop Class`,
+        description: `<b>ShellCon 2021</b><br /> Volunteer Team <br />Moderator/Support for Resume Workshop Class`,
         icon: 'tabler:briefcase',
       },
     ]}
