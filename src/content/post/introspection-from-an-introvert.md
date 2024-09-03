@@ -3,7 +3,7 @@ publishDate: 2022-05-13T00:00:00Z
 author: Joshua Morgan
 title: Introspection from an Introverted Information Security Instructor
 excerpt: Lessons from a first-time instructor.
-image: https://media.licdn.com/dms/image/v2/C5612AQEfShZJ3KDFKw/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1652468217662?e=1730332800&v=beta&t=1u6e050AjvnYR-YlIpfze2rx0t1CEaaeG1_ea3QOziA
+image: '~/assets/images/first-class-photo.png'
 category: Blog
 tags:
   - teaching
