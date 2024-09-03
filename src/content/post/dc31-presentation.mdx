@@ -128,7 +128,6 @@ We can query with just this, however we will get ALL data in the associated log:
 > In your own Threat Hunting (outside of this scenario), you will want to identify a timeframe to conduct your searches. This could be 24 Hours, 1 Week, 1 Month.
 
 In this scenario for this hunt, we are focusing on the whole day of 2023-04-29.
-![image]()
 
 In Linux, an example of a basic host nmap scan command line entry would look like this:
 
@@ -202,7 +201,6 @@ Let's look at the overall results:
 
 182 events - digging through this, we could probably refine this list down. Let's take a look at the hosts that show nmap activity. If we click on the host field on the left side, we see that 5 systems have been identified with something related to "nmap" on it:
 
-<INSERT IMAGE FOR HOSTS HERE>
 
 What we also notice is that a LOT of activity related to nmap appears to be by one particular system:
 
@@ -242,5 +240,107 @@ Let's refine our query and dig more into this system:
 ```
 index IN (windows,sysmon) (nmap) AND NOT host="wkst16.magnumtempus.financial" AND host="iot-eng-wkst.magnumtempus.financial"
 ```
+
+So now we have found some interesting activity that seems like it would be somewhat questionable. Many of the top few events we see are from the user we saw previously, Seth Morgan, connecting over the network from the source IP Address 172.16.50.20 to the destination IP Address 172.16.50.19 via port 3389.
+
+### What is port 3389?
+Port 3389 is commonly associated with Microsoft Windows Remote Desktop Protocol (RDP). This is a service that allows users to connect to a computer remotely via another computer.
+
+>!!!IMPORTANT NOTE!!!
+>Remote Desktop Protocol service should never be exposed to the public Internet. If this is required, please be sure to have this service hidden behind a secure VPN or some other access restriction.
+
+Moving forward with this in mind, we need to determine what the system 172.16.50.19 is. For this, we'll need to craft another query. 
+
+Don't worry, this one will be simple and we'll get back to our main query shortly.
+
+```
+index=* 172.16.50.19
+```
+
+When we run the query, we see can look at the hosts that are somewhat associated with this IP:
+
+
+Over 40% of the traffic is associated with this asset:
+
+>iot-jumpbox.magnumtempus.financial
+
+For those who may not be aware, a "jumpbox" is a system that is used as an intermediary between networks that may be highly restricted. This can be a normal practice and based on the hostname, we can presume this is an expected system on the network.
+
+Let's make a modification to the original query to only look for nmap activity from this system:
+
+```
+index IN (windows,sysmon) (nmap) AND host="iot-jumpbox.magnumtempus.financial"
+```
+
+Running this query, we see two entries this time:
+
+The first entry appears to be a file creation in the C:\Windows\SysWOW64 folder for nmap. Interesting, we may need to understand this more.
+
+The next entry is very intriguing. Looking at the metadata within this, we see command line activity from this system probing the overall network using nmap:
+
+> CommandLine: nmap  172.16.60.0/24 -p 22,5900,8080,80,443,502 -oA a -v
+
+Also, of note, is that this command was being run by a local user:
+
+> IOT-JUMPBOX\iotadmin
+
+We know this is a local user due to the fact that the username includes the system name "IOT-JUMPBOX". If this were a domain account, we would theoretically expect to see "MAGNUM.TEMPUS\iotadmin"
+
+Let's look at the command and dissect this so we understand what the command is looking for.
+
+As we discussed previously, the command goes across a subset of the network, looking at the entry
+
+> nmap 172.16.60.0/24
+
+This will cover all systems between the IP 172.16.60.1 and 172.16.60.254
+
+> -p 22,5900,8080,80,443,502
+
+This is an interesting part of the command because of the wide range of open services that this is looking for. Let's break each one down:
+
+* 22: This is for a remote service, Secure Shell, commonly called SSH. This is often used for remote access to a system, commonly over command line.
+* 5900: This is another remote service, Virtual Network Computing, VNC. This is used for Graphical remote access to systems, similar to Windows Remote Desktop Protocol.
+* 8080: This is looking for a web server. While this is not commonly used, 8080 is used in situations where the normally default web port 80 is unavailable.
+* 80: See above. This is the more common port used.
+* 443: This is for Secure HTTP, HTTPS. This adds a secure layer to regular HTTP.
+* 502: This port is the most intriguing of all of the ports for this query. This is not a port we would expect to be queried for except in specific scenarios. It is specifically used for Modbus TCP/IP, allowing devices in industrial automation systems to communicate over TCP/IP networks. Modbus is widely used for exchanging data between devices such as PLCs, SCADA systems, and other industrial controllers.
+
+> -oA a -v
+
+* -oA a: This flag is used to specify the output format and file naming convention for the scan results. In this case, the letter "a" is used as the argument after -oA. It instructs Nmap to save the results in three different formats: normal format (a.nmap), XML format (a.xml), and grepable format (a.gnmap). This makes sense as to why we saw the file being created in the Windows SysWOW64 folder, and based on the filename, matches.
+* -v: The -v flag is useful for obtaining a more comprehensive view of the scanning process and gathering additional insights about the targets being scanned.
+
+## Where does this leave us?
+
+What stands out for this is that a local admin account on the jumpbox is attempting to enumerate a network, specifically looking for exposed webhosts, remote services, and curiously enough a port associated with industrial systems.
+
+While this could be legitimate activity, I would not expect to see this type of a probe with all these seemingly unrelated ports being queried in a normal business operation. An administrator would not be looking for remote access ports, web servers, and an industrial-specific port, but instead have separate queries to do this.
+
+What's important to note is that our Threat Hunt focused only on computer/asset logs and we did not investigate any network traffic logs that could have provided additional context and support for our Hunt.
+
+This activity definitely raises some red flags, so we need to provide our findings to the next team for them to dig in deeper.
+
+Let's build our Threat Hunter Template now!
+
+## THREAT HUNTER TEMPLATE
+
+```
+Playbook Title: Detecting Reconnaissance in Company Environment
+
+Mitre Tactic: T1046 - Network Service Discovery
+
+Mitre Sub Technique: N/A
+
+Hypothesis: Reconnaissance activity is occurring in the Magnum Tempus environment, and some of the activity is malicious.
+
+Proposed Detection Query: index IN (windows,sysmon) (nmap) AND host="iot-jumpbox.magnumtempus.financial"
+
+Simulation Details: NONE
+
+Hunter Limitations/Observation Notes: Network traffic flow logs were not available during this hunt. Having access to these logs could add additional context for the search. Also of note, all of the fields were not parsed within the logging platform, making queries slightly less efficient and not as readable.
+
+Hunt Findings: There may be some fishy activity occurring, since we detected probing on an uncommon port associated with PLC/SCADA
+```
+
 
 [[Top]](#top)
