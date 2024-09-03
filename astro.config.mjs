@@ -97,14 +97,18 @@ export default defineConfig({
     '/about.html': {
       status: 302,
       destination: '/homes/personal/#about'
-    }
+    },
     '/videos.html': {
       status: 302,
       destination: '/category/videos/'
-    }
+    },
     '/all-posts.html': {
       status: 302,
       destination: '/category/blog/'
-    }
+    },
+    '/defaultsite': {
+      status: 302,
+      destination: '/'
+    },
   },
 });
