@@ -140,6 +140,107 @@ To make it easier, we can expand on our existing query and add just the text "nm
 index="linux" (nmap)
 ```
 
+Okay, so for some reason this did not provide any results.
 
+Did we do something wrong here? *Not exactly.* We're conducting a threat hunt for something we THINK might be in the environment. A threat hunt will not always be successful, but sometimes it can be. 
+
+Let's look at the index list again. So we see there are a few items that might be interesting to try. We see sysmonforlinux. Sysmon is a tool that is used to get telemetry data (information about what's happening on the computer, even activities that the end user doesn't ever see) and forwards this data to a log collector. This might also be a great source to query against.
+
+We can also try adding some of the other tools we referenced above to the query as well.
+
+## How can we refine this query?
+
+Let's start with the previous query:
+
+```
+index="linux" (nmap)
+```
+
+So there was no nmap activity in the linux logs in Splunk. Let's pivot to include another potential log source as well as another command line reconnaissance tool, masscan.
+
+Masscan might not be as commonly used as nmap and if we think like a potential adversary, we might want to use a tool that is less commonly used and therefore potentially less likely to be recognized.
+
+An example of a masscan command line would be:
+
+>masscan -p 80,443 192.168.1.0/24
+
+This scan is specifically looking for open HTTP (80) and HTTPS (443 Secure!) ports between 192.168.1.0 and 192.168.1.254.
+
+We can modify our search as seen here:
+
+```
+index IN (linux,sysmonforlinux) (masscan OR nmap)
+```
+
+This query did not net us any relevant hits, either.
+
+Let's pivot again - this is normal. Everything is fine.
+
+## How can we refine this query since the previous did not get us what we expected?
+
+Let's start with the initial query:
+
+```
+index="linux" (nmap)
+```
+
+Our initial hypothesis presumes that we have reconnaissance activity in the environment. We started looking at Linux systems to see if there was activity there, but perhaps we made a problematic first assumption that the reconnaissance would come from a Linux system. Let's go with the "sysmon" and "windows" index choices. Much like Sysmon for Linux, Windows Sysmon can provide telemetry from Microsoft Windows systems and there actually is a nmap version that can be used in Windows. We will not include masscan at this point because it's less common in Windows.
+
+Let's go!
+
+Here's what we should modify our search query to:
+
+```
+index IN (sysmon,windows) (nmap)
+```
+
+Let's run this query!
+
+We have hits!
+
+Let's look at the overall results:
+
+182 events - digging through this, we could probably refine this list down. Let's take a look at the hosts that show nmap activity. If we click on the host field on the left side, we see that 5 systems have been identified with something related to "nmap" on it:
+
+<INSERT IMAGE FOR HOSTS HERE>
+
+What we also notice is that a LOT of activity related to nmap appears to be by one particular system:
+
+>wkst16.magnumtempus.financial
+
+Let's dig into this system a bit to see what's happening.
+
+We need to modify the query again
+
+```
+index IN (windows,sysmon) (nmap) AND host="wkst16.magnumtempus.financial"
+```
+
+Running this, we see 152 events that match this query.
+
+Looking through these entries the only directly interesting entry is one associated with Powershell, but it appears to be activity associated with installing nmap, so I don't see this as particularly nefarious.
+
+We also see this system is associated with Seth Morgan, an IT Engineer. Without knowing much more about what an IT Engineer is within the orgainzation, let's take a moment to presume this is expected activity by this user.
+
+Let's compare with *Excluding* the host from the results:
+
+```
+index IN (windows,sysmon) (nmap) AND NOT host="wkst16.magnumtempus.financial"
+```
+
+29 events!
+
+Let's take another look at the breakdown of the hosts associated with this query:
+
+
+We see now that the top talker for this activity is:
+
+> iot-eng-wkst.magnumtempus.financial
+
+Let's refine our query and dig more into this system:
+
+```
+index IN (windows,sysmon) (nmap) AND NOT host="wkst16.magnumtempus.financial" AND host="iot-eng-wkst.magnumtempus.financial"
+```
 
 [[Top]](#top)
