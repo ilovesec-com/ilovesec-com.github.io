@@ -91,4 +91,12 @@ export default defineConfig({
       },
     },
   },
+
+
+  redirects: {
+    '/about.html: {
+      status: 302,
+      destination: '/homes/personal/#about'
+    }
+  },
 });
