@@ -1,0 +1,23 @@
+---
+publishDate: 2023-08-11T00:00:00Z
+title: (n)Map Explorations - A Great Time - DEF CON 31 (Blue Team Village)
+category: video
+image: '~/assets/images/nmap-exploration.jpg'
+excerpt: My Talk from DEF CON 31 in 2023
+tags:
+  - video
+  - information-security
+  - talk
+  - defcon
+  - blue-team
+  - threat-hunting
+  - teaching
+
+---
+
+import Logo from '~/components/Logo.astro';
+import { YouTube, Tweet, Vimeo } from 'astro-embed';
+
+<YouTube id="kKeV-Es17dc" />
+
+[[Top]](#top)
