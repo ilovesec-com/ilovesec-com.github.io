@@ -4,12 +4,14 @@ author: Joshua Morgan
 title: Introspection from an Introverted Information Security Instructor
 excerpt: Lessons from a first-time instructor.
 image: '~/assets/images/first-class-photo.png'
-category: Blog
+category: blog
 tags:
   - teaching
   - college
   - instructor
   - reflection
+  - introspection
+  - information-security
 metadata:
   canonical: https://www.ilovesec.com/introspection-from-an-introvert
 ---
@@ -41,3 +43,5 @@ One thing I know is that I don't know everything. It's okay to admit you don't k
 Final Notes
 
 All in all, it was definitely an amazing experience and one that has opened my eyes to further teaching in this industry. I'm looking forward to my next opportunity to share my knowledge with others.
+
+[[Top]](#top)

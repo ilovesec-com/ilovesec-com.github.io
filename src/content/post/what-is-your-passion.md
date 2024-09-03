@@ -3,11 +3,12 @@ publishDate: 2018-07-01T00:00:00Z
 author: Joshua Morgan
 title: 'What is Your Passion?'
 excerpt: What's your true passion?
-image: https://media.licdn.com/dms/image/v2/C5612AQEQ_huX04tYzQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1530429508771?e=1730332800&v=beta&t=G3TN9w0FbchFv2dXD5L62ZHm5thZRfxqXMaAq4O5CPM
+image: '~/assets/images/passion-blog.png'
 category: blog
 tags:
   - information-security
   - introspection
+  - career
 metadata:
   canonical: https://www.ilovesec.com/blog/passion
 ---
@@ -25,3 +26,6 @@ It is important to realize that being able to pursue your passion can help to ma
 Now that I've finished my Degree path, I can now try to combine the two passions with my original passion, writing and my newest passion: security.
 
 So, I ask you: What is your passion - **and what can you do to cultivate it**?
+
+[[Top]](#top)
+
