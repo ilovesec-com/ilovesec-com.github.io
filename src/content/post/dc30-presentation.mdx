@@ -45,13 +45,10 @@ In simple terms, phishing in this context is an attempt by an adversary to use m
 ## What is a phishing payload?
 A phishing payload is the means in which an adversary attempts to obtain the credentials of a target. The payload could be a link that sends an unsuspecting victim to a webpage that emulates a known website (like Microsoft Office 365 portal or Banking logon page) to collect usernames and passwords. Here are a few examples of malicious emails I have seen in my information security experiences:
 
-![image](https://user-images.githubusercontent.com/101851120/178579086-bbdd6b34-586b-4586-bc41-ac32a6a69fa0.png)
 
-![image](https://user-images.githubusercontent.com/101851120/178578529-4cb87fd8-4aeb-4f8a-88d1-a04d246752b0.png)
 
 Another type of payload can be a document or file specially crafted to behave in a certain manner or take specific actions to attempt to collect credentials from a user's system:
 
-![image](https://user-images.githubusercontent.com/101851120/178575935-711dfebe-67f9-4485-a471-7f14e8b2d595.png)
 
 Let's look at what we see in the above screenshot:
 > 1. The company email is mycoinsnow.com but the email sender is mycolnsnow.com - this is a typosquat of the domain.
@@ -68,7 +65,7 @@ Due to how the functionality works in allowing access outside of the walled gard
 
 An example of how the VBA Macro document could appear in a Microsoft Word document can be see here:
 
-![image](https://user-images.githubusercontent.com/101851120/178084934-774a0742-5521-41e1-97ee-72067b2eb9f8.png)
+
 
 **Now that we understand what phishing, phishing payloads, VBA, and macros are, let's put these concepts together to see if we can build a Threat Hunt with these ideas in mind!**
 
@@ -126,7 +123,7 @@ Thanks to our friend, [Cereal Killer](https://github.com/blueteamvillage/obsidia
 | eventcount summarize=false index=* | dedup index | fields index
 ```
 
-![image](https://user-images.githubusercontent.com/101851120/178582498-efd52248-db93-4443-a2a6-ed7b22eebe6a.png)
+
 
 We will start with Zeek logs in Splunk because we can find documents transmitted over network traffic if they are downloaded from a company email on a company asset. Zeek is used to collect telemetry data and traffic flowing through an organization's network.
 
@@ -137,14 +134,14 @@ index="zeek"
 ```
 We can query with just this, however we will get ALL data in the associated log:
 
-![image](https://user-images.githubusercontent.com/101851120/178585483-26c65504-b2d8-41b8-9765-8306e1095845.png)
+
 
 > NOTE: 
 > We need to change the time filter to the time period we are checking against for this specific scenario because we don't know exactly when the log data starts/stops.
 > In your own Threat Hunting (outside of this scenario), you will want to identify a timeframe to conduct your searches. This could be 24 Hours, 1 Week, 1 Month.
 
 In this scenario for Magnum Tempus, we are focusing on 2022-02-11 through 2022-02-13
-![image](https://user-images.githubusercontent.com/101851120/178586344-250a9960-0805-469a-b083-29e9ffc82f4c.png)
+
 
 Let’s focus on document file types that are often sent as potential phishing attachments.
 
@@ -155,7 +152,7 @@ index="zeek" (.doc OR .xls OR .docx OR .xlsx)
 ```
 
 We get lots of hits (863!) because a lot of documents will be sent as part of normal business: 
-![image](https://user-images.githubusercontent.com/101851120/178586583-6ad0e33f-1480-4376-9a5a-e5a2d6ed170f.png)
+
 
 Let’s try to pare down the total number to a more manageable number using some common phishing terms.
 
@@ -168,7 +165,7 @@ index="zeek" (.doc OR .xls OR .docx OR .xlsx)
 ```
 
 This gave us way too many results. We want to reduce the number of files, but need to find files that could indicate potential phishing activity. Occasionally we see common terms/names in documents related to phishing activity as seen here at [SANS Common Patterns Used in Phishing Campaign Files](https://isc.sans.edu/forums/diary/Common+Patterns+Used+in+Phishing+Campaigns+Files/23403/):
-![image](https://user-images.githubusercontent.com/101851120/178581518-8fcb9635-4221-4e33-ae84-e6dcdf755994.png)
+
 
 Let's pick a few and run another search, this time expanding our search to other log sources within Splunk (using index IN):
 
@@ -176,7 +173,7 @@ Let's try including a different log source with our zeek query.
 
 Looking at our index from before, let's go with sysmon, as we might be able to see files accessed on endpoints (Much like how Zeek is used for network telemetry, Sysmon is used to generate telemetry data from endpoint devices in an organization.)
 
-![image](https://user-images.githubusercontent.com/101851120/178583657-9b6225dd-0bca-48db-a74b-84e8e585da20.png)
+
 
 We can modify our search as seen here:
 
@@ -185,7 +182,7 @@ index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (invoice OR remit OR pay
 ```
 
 This query did not net us any relevant hits:
-![image](https://user-images.githubusercontent.com/101851120/178586791-8f6368ca-afc0-4e80-8b8c-41979886424a.png)
+
 
 
 We should probably try a different approach.
@@ -222,13 +219,13 @@ Let's run this query!
 
 We have hits!
 
-![image](https://user-images.githubusercontent.com/101851120/178584039-b9723c52-a525-4ebb-bca6-9e1f2dd0bc1a.png)
+
 
 Let's look at the overall results:
 
 62 events - this should be easier to parse. Looking at one of the first hits we see there is what appears to be an internal fileshare:
 
-![image](https://user-images.githubusercontent.com/101851120/178584239-6359ea1b-1801-469e-8e3b-0e48a19f671c.png)
+
 
 ```
 files.magnumtempusfinancial.com
@@ -241,7 +238,7 @@ index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords) AND (file
 ```
 
 Running this, we see 26 events that match this query:
-![image](https://user-images.githubusercontent.com/101851120/178588160-3c908fe7-c08b-4f29-b464-54bcabef34c6.png)
+
 
 Let's compare with *Excluding* the fileshare from the results:
 
@@ -249,12 +246,12 @@ Let's compare with *Excluding* the fileshare from the results:
 index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords) AND NOT (files.magnumtempusfinancial.com)
 ```
 
-![image](https://user-images.githubusercontent.com/101851120/178588799-05c3198a-3623-4bb6-a22e-8c52b30666a1.png)
+
 
 22 events!
 
 Here's the first event that shows up:
-![image](https://user-images.githubusercontent.com/101851120/178053478-0b803cea-426a-4dbb-8dae-3d2a6c3754e3.png)
+
 
 > Registry value set:
 > RuleName: -
@@ -284,11 +281,11 @@ This is an interesting filename because it appears to include an email in the fi
 
 If we look at the bottom of the first entry, we see a workstation name (agent.hostname):
 
-![image](https://user-images.githubusercontent.com/101851120/178053664-354bc579-59ff-45c4-a925-0392c47cedf4.png)
+
 
 Let's see if Splunk can show us more data. On the left side of the page, go to the "SELECTED FIELDS" section, then click on "agent.hostname":
 
-![image](https://user-images.githubusercontent.com/101851120/178053991-5a40e133-3051-4ff8-b967-b185b425d8c8.png)
+
 
 Matt's hostname appears to be wkst03 - not many hits. wkst01 and wkst02 have a significantly higher number of entries, and this could signify additional activity.
 
@@ -302,14 +299,14 @@ index IN (zeek,sysmon) (MagnumTempus-Policy-Violation-)
 
 When we run the query, we see additional users were targeted:
 
-![image](https://user-images.githubusercontent.com/101851120/178589213-9937f294-7470-404b-b723-64ce7b4cf76e.png)
+
 
 > MagnumTempus-Policy-Violation-domi.nusvir@magnumtempusfinancial.com.doc
 > MagnumTempus-Policy-Violation-celiste.pecunia@magnumtempusfinancial.com.doc
 
 We also see where the file was downloaded from for one user, Matt Tristique:
 
-![image](https://user-images.githubusercontent.com/101851120/179577057-0df6a003-d7a3-4bec-9821-1ef3b59b1ec1.png)
+
 
 > File stream created:
 > RuleName: technique_id=T1089,technique_name=Drive-by Compromise
@@ -337,7 +334,7 @@ Let's see if any other users downloaded this file with ThunderBird:
 index IN (zeek,sysmon) (MagnumTempus-Policy-Violation-) (thunderbird.exe)
 ```
 
-![image](https://user-images.githubusercontent.com/101851120/178589579-0a0d6654-5266-4886-a7cc-eae0e3f722c5.png)
+
 
 From our search, it appears both Amanda and Karen downloaded the file via ThunderBird.
 
@@ -380,7 +377,7 @@ WireShark is a specialized tool for analyzing network data. We can review data f
 ### Locating the offending email in WireShark
 Since we know what the filename, based on our searches above:
 
-![image](https://user-images.githubusercontent.com/101851120/178589850-376ed8fe-6cb2-434d-a9f6-b8b6d5781817.png)
+
 
 Let's look at the filename:
 
@@ -400,11 +397,11 @@ In the text box, type the following (3):
 
 > Policy-Violation-
 
-![image](https://user-images.githubusercontent.com/101851120/180121684-cc0232ea-039c-4531-8bfb-ec856ef226b5.png)
+
 
 Press "Find":
 
-![image](https://user-images.githubusercontent.com/101851120/177913687-6c99d0f5-de32-48ce-8862-ee74611c7b95.png)
+
 
 Let's review what we see here:
 
@@ -412,16 +409,16 @@ Let's review what we see here:
 > 2. From: legal-internal@magnumtempus.financial
 
 Time to dig deeper! Right click on this entry and go to "Follow" then click on "TCP Stream":
-![image](https://user-images.githubusercontent.com/101851120/177915426-880aafb4-2fca-41bc-8a3c-cfe365f63dd9.png)
+
 
 A window will pop up with the network stream for this activity:
-![image](https://user-images.githubusercontent.com/101851120/177915504-3c555dc4-c04f-4612-98d2-46af315ab042.png)
+
 
 Scrolling down further we get to the content of the email itself. What makes this interesting is that perhaps the mail server was not properly configured, because we are able to see in clear-text over the network contents of an email. This has other security implications that we will not discuss here, but is important to note for future investigations.
 
 We can see the content here:
 
-![image](https://user-images.githubusercontent.com/101851120/177915656-9c1e72de-3b5d-4f9d-beef-13340f3cfd4e.png)
+
 
 ```
 The MagnumTempus Financial CERT and CyberSecurity team have noticed that you are one of the users - "karen.metuens@magnumtempus.financial", "amanda.nuensis@magnumtempus.financial", who have violated the company policy CCG-IV:5-8 on 2/7/2022, 8:48pm - EDT.
@@ -437,7 +434,7 @@ legal-internal@magnumtempus.financial
 ```
 
 Scrolling down further, we see there is an attachment:
-![image](https://user-images.githubusercontent.com/101851120/178591490-4518550d-f61a-4a98-9c34-46e7d3899e20.png)
+
 
 A few notes about this screenshot:
 > 1. The attachment is encoded, this one in Base64. Base64 is a common encoding algorythm that can be used to 'encrypt' documents to transmit.
@@ -477,20 +474,20 @@ AAAAAAAAAAAAAAAAAAAAAA==
 
 We can then take the data we've copied and then use a tool like [CyberChef](https://gchq.github.io/CyberChef/) to convert from Base64 to somewhat human-readable text:
 
-![image](https://user-images.githubusercontent.com/101851120/177916271-7a0c4cad-33c1-4e01-a58f-fe8dc394e65f.png)
+
 
 Scrolling down, we can see data inside the converted code that indicates it's a Microsoft Document:
 
-![image](https://user-images.githubusercontent.com/101851120/177916386-0849258a-15ca-4548-8cb2-b05daefc60ab.png)
+
 
 Further down the code, we see proof of Visual Basic for Application Macros:
 
-![image](https://user-images.githubusercontent.com/101851120/177916857-234c6717-47a6-4278-bf50-e5de68778edb.png)
+
 
 
 Then, with the assistance of MOVIE MAGIC (I made that up), we are able to reassemble the malicious document to see there are macros with obfuscation:
 
-![image](https://user-images.githubusercontent.com/101851120/180122396-15ccd78a-bb4e-45dd-957b-0875a062fabb.png)
+
 
 If we look at the Macro above - there are a few important parts that stick out:
 
