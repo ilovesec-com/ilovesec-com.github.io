@@ -240,7 +240,7 @@ index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords) AND (file
 Running this, we see 26 events that match this query:
 
 
-Let's compare with *Excluding* the fileshare from the results:
+Let's compare with Excluding the fileshare from the results:
 
 ```
 index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords) AND NOT (files.magnumtempusfinancial.com)
@@ -260,3 +260,265 @@ Here's the first event that shows up:
 > Details: Binary Data
 > User: MAGNUMTEMPUS\matt.tristique 
 
+Based on the above we can see that a file was indeed executed according to the "Trusted Documents\TrustRecords" we saw in the SANS example of macro activity. This is a step in the right direction.
+
+There were other users with similar activity, let's take a look:
+
+> TargetObject: HKU\S-1-5-21-2370586174-1517003462-1142029260-1128\SOFTWARE\Microsoft\Office\16.0\Word\Security\Trusted Documents\TrustRecords
+\%USERPROFILE%/Desktop/MagnumTempus-Policy-Violation-karen.metuens@magnumtempusfinancial.com.doc
+> TargetObject: HKU\S-1-5-21-2370586174-1517003462-1142029260-1126\SOFTWARE\Microsoft\Office\16.0\Word\Security\Trusted Documents\TrustRecords
+\%USERPROFILE%/Desktop/MagnumTempus-Policy-Violation-amanda.nuensis@magnumtempusfinancial.com.doc
+
+All of the filetypes appear to be .doc and the filenames appear to be extremely formulaic and similar:
+
+> MagnumTempus-Policy-Violation-karen.metuens3@magnumtempusfinancial.com.doc
+
+This is an interesting filename because it appears to include an email in the filename, which is NOT normal and could be a sign of a malicious file. 
+
+If we look at the bottom of the first entry, we see a workstation name (agent.hostname):
+
+
+
+Let's see if Splunk can show us more data. On the left side of the page, go to the "SELECTED FIELDS" section, then click on "agent.hostname":
+
+
+
+Matt's hostname appears to be wkst03 - not many hits. wkst01 and wkst02 have a significantly higher number of entries, and this could signify additional activity.
+
+## Can we find the source of the files?
+
+Let's try to see what we can find with this filename in the logs. We have to create a new query:
+
+```
+index IN (zeek,sysmon) (MagnumTempus-Policy-Violation-)
+```
+
+When we run the query, we see additional users were targeted:
+
+
+
+> MagnumTempus-Policy-Violation-domi.nusvir@magnumtempusfinancial.com.doc
+> MagnumTempus-Policy-Violation-celiste.pecunia@magnumtempusfinancial.com.doc
+
+We also see where the file was downloaded from for one user, Matt Tristique:
+
+
+
+> File stream created:
+> RuleName: technique_id=T1089,technique_name=Drive-by Compromise
+> UtcTime: 2022-02-12 21:11:41.529
+> ProcessGuid: {0522759F-02B6-6208-A600-000000001002}
+> ProcessId: 5616
+> Image: C:\Program Files\Mozilla Thunderbird\thunderbird.exe
+> TargetFilename: C:\Users\matt.tristique\Downloads\MagnumTempus-Policy-Violation-matt.tristique@magnumtempusfinancial.com.doc:Zone.Identifier
+> CreationUtcTime: 2022-02-12 21:11:40.731
+> Hash: SHA1=AE356A67D337AFA5933E3E679E84854DEEACE048,MD5=DCE5191790621B5E424478CA69C47F55,SHA256=86A3E68762720ABE870D1396794850220935115D3CCC8BB134FFA521244E3EF8,IMPHASH=00000000000000000000000000000000
+> Contents: [ZoneTransfer]  ZoneId=3  HostUrl=about:internet  
+> User: MAGNUMTEMPUS\matt.tristique 
+
+This entry is very intriguing:
+
+> RuleName: technique_id=T1089,technique_name=Drive-by Compromise
+
+It appears that this file was detected as a ***Drive-by Compromise***. This is not good. We might be able to surmise this is a malicious document based on this.
+
+## Who else downloaded the document?
+
+Let's see if any other users downloaded this file with ThunderBird:
+
+```
+index IN (zeek,sysmon) (MagnumTempus-Policy-Violation-) (thunderbird.exe)
+```
+
+
+
+From our search, it appears both Amanda and Karen downloaded the file via ThunderBird.
+
+Interestingly enough, neither Amanda's nor Karen's entries signify that the file was detected as a ***Drive-by Compromise***:
+
+> File created:
+> RuleName: -
+> UtcTime: 2022-02-12 21:11:24.552
+> ProcessGuid: {29C462BB-0EC0-6208-D000-000000001202}
+> ProcessId: 3184
+> Image: C:\Program Files\Mozilla Thunderbird\thunderbird.exe
+> TargetFilename: C:\Users\amanda.nuensis\Desktop\MagnumTempus-Policy-Violation-amanda.nuensis@magnumtempusfinancial.com.doc
+> CreationUtcTime: 2022-02-12 21:11:24.552
+> User: MAGNUMTEMPUS\amanda.nuensis 
+
+> File created:
+> RuleName: -
+> UtcTime: 2022-02-11 04:51:45.698
+> ProcessGuid: {444CBE19-EAF9-6205-E600-000000001302}
+> ProcessId: 5552
+> Image: C:\Program Files\Mozilla Thunderbird\thunderbird.exe
+> TargetFilename: C:\Users\karen.metuens\Desktop\MagnumTempus-Policy-Violation-karen.metuens@magnumtempusfinancial.com.doc
+> CreationUtcTime: 2022-02-11 04:51:45.572
+> User: MAGNUMTEMPUS\karen.metuens 
+
+## What does this mean?
+Unfortunately, at least three of Magnum Tempus employees downloaded (and based on what we know about the registry changes involving "Trust Records" - successfully ran the malicious code) a malicious document laden with VBA Macro documents. At this point, it might be worth it to investigate further what has happened as a result of detonation of the intial malicious payload.
+
+## Are we done?
+In theory, at this point we are done as we have fulfilled the initial hypothesis of determining that a user downloaded and executed the VBA Macro. While we have not necessarily confirmed that the macro code is indeed malicious, we would need to take additional steps to do this.
+
+## Can we find the initial email that contained the malicious document - and possibly the document itself and inspect the code?
+Yes! However, we will need to use another tool, WireShark in order to extract information from the captured network traffic (PCAP File).
+
+# Threat Hunting and Investigation with WireShark
+
+## What is WireShark?
+WireShark is a specialized tool for analyzing network data. We can review data flowing through the network in real-time, however in this specific case we will be reviewing a point-in-time capture of Magnum Tempus network traffic.
+
+### Locating the offending email in WireShark
+Since we know what the filename, based on our searches above:
+
+
+
+Let's look at the filename:
+
+> MagnumTempus-Policy-Violation-karen.metuens@magnumtempusfinancial.com.doc
+
+Since MagnumTempus is something that we might expect to see in other documents, let's disregard this for the moment. The term "Policy-Violation-" stands out as something that might be unique in an organization. Taking this mindset, let's use the following for our further search:
+
+> Policy-Violation-
+
+Now let's check to see if we can find this in WireShark:
+
+Press control and F to bring up the search tool. 
+
+Change the first dropdown to "Packet Details" (1).  
+In the third dropdown change to "String" (2)
+In the text box, type the following (3):
+
+> Policy-Violation-
+
+
+
+Press "Find":
+
+
+
+Let's review what we see here:
+
+> 1. Subject: [ACTION REQUIRED] INTERNAL IT POLICY VIOLATION
+> 2. From: legal-internal@magnumtempus.financial
+
+Time to dig deeper! Right click on this entry and go to "Follow" then click on "TCP Stream":
+
+
+A window will pop up with the network stream for this activity:
+
+
+Scrolling down further we get to the content of the email itself. What makes this interesting is that perhaps the mail server was not properly configured, because we are able to see in clear-text over the network contents of an email. This has other security implications that we will not discuss here, but is important to note for future investigations.
+
+We can see the content here:
+
+
+
+```
+The MagnumTempus Financial CERT and CyberSecurity team have noticed that you are one of the users - "karen.metuens@magnumtempus.financial", "amanda.nuensis@magnumtempus.financial", who have violated the company policy CCG-IV:5-8 on 2/7/2022, 8:48pm - EDT.
+
+As mentioned in the yearly cybersecurity training and your employment agreement with MagnumTempus, the violation of IT policy may terminate your employment. 
+
+Please review the attachment which includes the decision made by the MagnumTempus Legal team. Make sure to reply to this email within 72 hours of opening the document. 
+
+Thank you, 
+MagnumTempus Internal Legal Department 
+(+1)969-555-5984
+legal-internal@magnumtempus.financial 
+```
+
+Scrolling down further, we see there is an attachment:
+
+
+A few notes about this screenshot:
+> 1. The attachment is encoded, this one in Base64. Base64 is a common encoding algorythm that can be used to 'encrypt' documents to transmit.
+> 2. The filename for the attachment matches what we expect to see, based on our findings in our Splunk investigations
+> 3. This is the Base64 encoded data for the document.
+
+This matches what we saw in our earlier Splunk queries. We might be able to extract the file data from WireShark to analyze further - an important thing to note from above is that the data is encoded in Base64:
+
+```
+NOTE: The below is a truncated version of the actual payload data for brevity purposes:
+
+0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7/CQAGAAAAAAAAAAAAAAABAAAAJwAAAAAAAAAA
+EAAAKQAAAAEAAAD+////AAAAACYAAAD/////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////s
+pcEAWeAJBAAA8BK/AAAAAAAAEAAAAAAACAAAAQgAAA4AYmpiapDKkMoAAAAAAAAAAAAAAAAAAAAA
+AAAJBBYALg4AAPKgDFzyoAxcAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//w8AAAAA
+AAAAAAD//w8AAAAAAAAAAAD//w8AAAAAAAAAAAAAAAAAAAAAALcAAAAAADIHAAAAAAAAMgcAAKoU
+AAAAAAAAqhQAAAAAAACqFAAAAAAAAKoUAAAAAAAAqhQAABQAAAAAAAAAAAAAAP////8AAAAAvhQA
+AAAAAAC+FAAAAAAAAL4UAAAAAAAAvhQAAAwAAADKFAAADAAAAL4UAAAAAAAAtRcAADABAADWFAAA
+AAAAAAAAAAAAAAAAAAAAAABFeHRlbmRlciBJbmZvXQ0KJkgwMDAwMDAwMT17MzgzMkQ2NDAtQ0Y5
+MC0xMUNGLThFNDMtMDBBMEM5MTEwMDVBfTtWQkU7JkgwMDAwMDAwMA0KDQpbV29ya3NwYWNlXQ0K
+VGhpc0RvY3VtZW50PTAsIDAsIDAsIDAsIEMNCk5ld01hY3Jvcz0tMTYsIDY0LCAxNDI5LCA1ODgs
+IA0KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AwoAAP////8GCQIAAAAA
+AMAAAAAAAABGIAAAAE1pY3Jvc29mdCBXb3JkIDk3LTIwMDMgRG9jdW1lbnQACgAAAE1TV29yZERv
+YwAQAAAAV29yZC5Eb2N1bWVudC44APQ5snEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAA==
+```
+
+We can then take the data we've copied and then use a tool like [CyberChef](https://gchq.github.io/CyberChef/) to convert from Base64 to somewhat human-readable text:
+
+
+
+Scrolling down, we can see data inside the converted code that indicates it's a Microsoft Document:
+
+
+
+Further down the code, we see proof of Visual Basic for Application Macros:
+
+
+
+
+Then, with the assistance of MOVIE MAGIC (I made that up), we are able to reassemble the malicious document to see there are macros with obfuscation:
+
+
+
+If we look at the Macro above - there are a few important parts that stick out:
+
+1. This is set to automatically run the "test" function/macro on document open.
+2. This is also set to automatically run the "test" function.
+3. This macro is heavily encoded, perhaps to hide the true intent behind the function?
+
+This is **DEFINITELY NOT GOOD**
+
+There should be no reason for this level of encoding for a document of this nature. 
+
+At this point, it may be a good spot to pass this to the next team to begin their steps.
+
+## THREAT HUNTER TEMPLATE
+
+```
+Playbook Title: Detecting Enterprise Macro Activity from Emails
+
+Mitre Tactic: T1566, Phishing
+
+Mitre Sub Technique: T1566.001, Spearphishing Attachment
+
+Hypothesis: Employees are targeted with malicious documents with VBA Macro Code and 
+some employees will open the documents and detonate the payload
+
+Proposed Detection Query: index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords)
+AND NOT (files.magnumtempusfinancial.com)
+
+Simulation Details: NONE
+
+Hunter Limitations/Observation Notes: During several portions of the hunt, we discovered that there 
+were log sources (sysmon) that were not properly parsed, which made finding details difficult. If we had these 
+parsed properly, we may have found it easier to get some of the data.
+
+Hunt Findings: Three users downloaded the malicious document, two users appear to have
+been affected by the payload.
+```
+[[Top]](#top)
