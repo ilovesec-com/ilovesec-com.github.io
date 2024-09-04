@@ -246,19 +246,3 @@ Let's compare with *Excluding* the fileshare from the results:
 index IN (zeek,sysmon) (.doc OR .xls OR .docx OR .xlsx) (TrustRecords) AND NOT (files.magnumtempusfinancial.com)
 ```
 
-22 events!
-
-Here's the first event that shows up:
-
-
-> Registry value set:
-> RuleName: -
-> EventType: SetValue
-> UtcTime: 2022-02-12 21:12:25.454
-> ProcessGuid: {0522759F-229C-6208-B002-000000001002}
-> ProcessId: 972
-> Image: C:\Program Files\Microsoft Office\Root\Office16\WINWORD.EXE
-> TargetObject: HKU\S-1-5-21-2370586174-1517003462-1142029260-1129\SOFTWARE\Microsoft\Office\16.0\Word\Security\TrustedDocuments\TrustRecords\%USERPROFILE%/Downloads/MagnumTempus-Policy-Violation-matt.tristique@magnumtempusfinancial.com.doc
-> Details: Binary Data
-> User: MAGNUMTEMPUS\matt.tristique 
-
