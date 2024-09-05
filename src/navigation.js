@@ -30,7 +30,7 @@ export const headerData = {
       ],
     },
     {
-      text: 'Blog/Content', href: getPermalink('/homes/personal'),
+      text: 'Content', href: getPermalink('/homes/personal'),
       links: [
         {
           text: 'Blog',
