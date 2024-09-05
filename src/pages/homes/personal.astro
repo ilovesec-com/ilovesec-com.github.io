@@ -51,7 +51,17 @@ const metadata = {
       ],
     },
     {
-      text: 'Blog', href: '/blog',
+      text: 'Blog/Content', href: getPermalink('/homes/personal'),
+      links: [
+        {
+          text: 'Blog',
+          href: getPermalink('category/blog/'),
+        },
+        {
+          text: 'Videos',
+          href: getPermalink('category/video/'),
+        },
+      ],
     },
       ]}
       actions={[
