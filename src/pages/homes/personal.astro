@@ -170,12 +170,20 @@ const metadata = {
     </Fragment>
   </Content>
   
-  <Hero
-    id="rangescore"
-    actions={[{ variant: 'primary', text: 'Check out my ACE-T Score!', href: 'https://lookup.hackhills.com/?id=2339261' }]}
-  >
-  </Hero>
+  <!-- CallToAction Widget *********** -->
 
+  <CallToAction
+    title="Security Cyber Ranges/Capture The Flags"
+    subtitle="I have participated in some amazing Capture The Flag events. Here are a few:"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Antisyphon Cyber Range ACE-T',
+        target: '_blank',
+        href: 'https://lookup.hackhills.com/?id=2339261',
+      },
+    ]}
+  />
 <!-- Steps Widget ****************** -->
 
   <Steps
