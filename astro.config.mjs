@@ -98,6 +98,10 @@ export default defineConfig({
       status: 302,
       destination: '/homes/personal/#about'
     },
+    '/about/': {
+      status: 302,
+      destination: '/homes/personal/#about'
+    },
     '/videos.html': {
       status: 302,
       destination: '/category/videos/'
