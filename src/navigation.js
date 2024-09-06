@@ -40,6 +40,10 @@ export const headerData = {
           text: 'Videos',
           href: getPermalink('category/video/'),
         },
+        {
+          text: 'SOC Tools',
+          href: 'https://github.com/samunoske/SOC-Tools',
+        },
       ],
     },
   ],
