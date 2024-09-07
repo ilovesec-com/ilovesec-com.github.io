@@ -19,7 +19,9 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <Fragment slot="announcement"></Fragment>
+  <Fragment slot="announcement"><a class="text-muted hover:underline dark:text-slate-400 font-medium"
+    >I will be at GrrCON in September 2024! »</a
+  ></Fragment>
   <Fragment slot="header">
     <Header
       links={[
@@ -235,6 +237,10 @@ const metadata = {
       {
         title: 'CompTIA Security Analytics Professional (CSAP)',
         description: 'Earners of this certification are security analytics professionals that have the ability to plan and carry out security measures to protect an organization’s computer networks and systems.',
+        callToAction: {
+          target: '_blank',
+          text: Credly',
+          href: 'https://credly.com',
       },
       {
         title: 'GIAC GSEC',
