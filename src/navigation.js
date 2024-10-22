@@ -67,6 +67,6 @@ export const footerData = {
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/samunoske' },
   ],
   footNote: `
-  <a rel="me" href="https://infosec.exchange/@Samunoske"></a>2024
+  2024
   `,
 };
