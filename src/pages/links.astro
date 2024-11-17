@@ -1,0 +1,61 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Hero from '~/components/widgets/Hero.astro';
+import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import Content from '~/components/widgets/Content.astro';
+import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'ilovesec - Information Security and Introspection',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Blog Posts',
+        href: '/blog/',
+        target: '_blank',
+           },
+    ]}
+  >
+    <Fragment slot="title">
+      <span class="text-accent dark:text-white highlight">links</span> <br />
+    </Fragment>
+  </Hero>
+    <Hero
+    actions={[
+      { text: 'About Me', href: '/homes/personal/#about' },
+    ]}
+  >
+  </Hero>
+    <Hero
+  actions={[
+    { text: 'About Me', href: '/homes/personal/#about' },
+  ]}
+>
+</Hero>
+    <Hero
+  actions={[
+    { text: 'About Me', href: '/homes/personal/#about' },
+  ]}
+>
+</Hero>    <Hero
+  actions={[
+    { text: 'About Me', href: '/homes/personal/#about' },
+  ]}
+>
+</Hero>
+</Layout>
