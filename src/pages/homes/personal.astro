@@ -308,13 +308,17 @@ const metadata = {
 
   <!-- BlogLatestPost Widget **************** -->
 
-  <BlogLatestPosts
-    id="blog"
-    title="Explore my insightful articles on my blog"
-    information={`I share my thoughts and insights on information security and other topics.`}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </BlogLatestPosts>
+<script>
+window.SubstackFeedWidget = {
+substackUrl: "ilovesec.substack.com",
+posts: 3,
+layout: "center",
+colors: {
+primary: "#FFFFFF",
+secondary: "#BEBEBE",
+background: "#030620",
+}
+};
+</script>
+<script src="https://substackapi.com/embeds/feed.js" async></script>
 </Layout>
