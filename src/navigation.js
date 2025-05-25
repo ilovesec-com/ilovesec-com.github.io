@@ -34,7 +34,7 @@ export const headerData = {
       links: [
         {
           text: 'Blog',
-          href: getPermalink('category/blog/'),
+          href: 'https://ilovesec.substack.com',
         },
         {
           text: 'Videos',
