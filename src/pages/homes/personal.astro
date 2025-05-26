@@ -29,7 +29,7 @@ const metadata = {
       text: 'Home', href: '/'
     },
     {
-      text: 'Contact', href: getPermalink('/contact'),
+      text: 'Contact', href: 'contact',
     },
     {
       text: 'About', href: getPermalink('/homes/personal'),
@@ -73,7 +73,7 @@ const metadata = {
       actions={[
         {
           text: 'Hire me',
-          href: getPermalink('/contact'),
+          href: 'contact',
         },
       ]}
       isSticky
@@ -157,9 +157,10 @@ const metadata = {
 <br class="hidden md:inline" />
 <p>I have a passion for training and teaching people new to the industry and believe in the importance of sharing knowledge and experience to improve and grow together. Whether I am working as a leader or mentor, I am dedicated to providing valuable guidance and support to those around me.</p>
       <br />
-<p>Check out more about me: <br />
+<div id="contact"></div><p>Check out more about me: <br />
 <b><a href="https://ilovesec.substack.com"><u>Blog</u></a> | <a href="/category/video/"><u>Videos</u></a> | <a href="#ctf"><u>CTFs</u></a> | <a href="#presentations"><u>Talks</u></a> | <a href="#highlights"><u>Community</u></a> | <a href="#certs"><u>Certs</u></a> | <a href="#skills"><u>Skills</u></a></b></p><br />
-      <p>If you're curious to dive deeper into my work, you can follow me:</p>
+      <p>If you're curious to dive deeper into my work, you can contact me today!</p><br /><br />
+<b>Email:</b> info@ilovesec.com<br />
     </Fragment>
 
     <Fragment slot="bg">
