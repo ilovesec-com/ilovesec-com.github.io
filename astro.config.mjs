@@ -121,7 +121,15 @@ export default defineConfig({
     '/blog/': {
       status: 302,
       destination: 'https://ilovesec.substack.com'
-    },    
+    },   
+    '/category/video/': {
+      status: 302,
+      destination: 'https://ilovesec.substack.com/t/video'
+    },
+    '/video/': {
+      status: 302,
+      destination: 'https://ilovesec.substack.com/t/video'
+    },  
     '/defaultsite': {
       status: 302,
       destination: '/'
