@@ -113,7 +113,15 @@ export default defineConfig({
     '/all-posts.html': {
       status: 302,
       destination: '/category/blog/'
+    },    
+    '/category/blog/': {
+      status: 302,
+      destination: 'https://ilovesec.substack.com'
     },
+    '/blog/': {
+      status: 302,
+      destination: 'https://ilovesec.substack.com'
+    },    
     '/defaultsite': {
       status: 302,
       destination: '/'
