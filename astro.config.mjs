@@ -130,9 +130,9 @@ export default defineConfig({
       status: 302,
       destination: 'https://ilovesec.substack.com/t/video'
     },
-    '/blog/:title':  {
-      status: 302,
-      destination: 'https://ilovesec.substack.com/p/' + ':title',
+    '/blog/(.*)': {
+        status: 302,
+        destination: 'https://ilovesec.substack.com/p/$1',
     },
     '/defaultsite': {
       status: 302,
