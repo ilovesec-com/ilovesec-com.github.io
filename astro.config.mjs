@@ -116,23 +116,23 @@ export default defineConfig({
     },    
     '/category/blog/': {
       status: 302,
-      destination: 'https://ilovesec.substack.com'
+      destination: 'https://ilovesec.substack.com',
+      target: '_blank'
     },
     '/blog/': {
       status: 302,
-      destination: 'https://ilovesec.substack.com'
+      destination: 'https://ilovesec.substack.com',
+      target: '_blank'
     },   
     '/category/video/': {
       status: 302,
-      destination: 'https://ilovesec.substack.com/t/video'
+      destination: 'https://ilovesec.substack.com/t/video',
+      target: '_blank'
     },
     '/video/': {
       status: 302,
-      destination: 'https://ilovesec.substack.com/t/video'
-    },
-    '/blog/(.*)': {
-        status: 302,
-        destination: 'https://ilovesec.substack.com/p/$1',
+      destination: 'https://ilovesec.substack.com/t/video',
+      target: '_blank'
     },
     '/defaultsite': {
       status: 302,
