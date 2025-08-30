@@ -20,7 +20,7 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <Fragment slot="announcement"><a class="text-muted hover:underline dark:text-slate-400 font-medium"
-    >I will be at DEF CON 33! See you there!»</a
+    >I will be at GrrCON 2025! See you there!»</a
   ></Fragment>
   <Fragment slot="header">
     <Header
@@ -30,6 +30,18 @@ const metadata = {
     },
     {
       text: 'Contact', href: getPermalink('/homes/personal/#contact'),
+      
+      links: [
+        {
+          text: 'Contact Me',
+          href: getPermalink('/homes/personal/#contact'),
+        },
+        {
+          text: 'Book Time with Me!',
+          href: 'https://schedule.ilovesec.com',
+        },
+        ],
+
     },
     {
       text: 'About', href: getPermalink('/homes/personal'),
@@ -41,6 +53,10 @@ const metadata = {
         {
           text: 'Security Talks',
           href: getPermalink('/homes/personal/#presentations'),
+        },
+        {
+          text: 'Sessionize Profile',
+          href: 'https://sessionize.com/joshua-morgan/',
         },
         {
           text: 'Security Community Highlights',
@@ -79,8 +95,8 @@ const metadata = {
       ]}
       actions={[
         {
-          text: 'Hire me',
-          href: getPermalink('/homes/personal/#contact'),
+          text: 'Book Time with Me!',
+          href: 'https://schedule.ilovesec.com',
         },
       ]}
       isSticky
@@ -94,7 +110,7 @@ const metadata = {
     id="about"
     title="Joshua Morgan"
     tagline="Security Advocate | Trainer | Leader"
-    actions={[{ variant: 'primary', text: 'Hire me', href: getPermalink('/contact#form') }]}
+    actions={[{ variant: 'primary', text: 'Book Time with Me!', href: 'https://schedule.ilovesec.com' }]}
     columns={3}
     items={[
       {
@@ -169,6 +185,7 @@ const metadata = {
       <p>If you're curious to dive deeper into my work, you can contact me today!</p><br />
       <h2 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Contact Me:</h2>
 <b>Email:</b> info@ilovesec.com<br />
+<b>Book Time:</b> <a href="http://schedule.ilovesec.com" target="_blank">Availability Schedule</a><br />
     </Fragment>
 
     <Fragment slot="bg">
@@ -198,6 +215,12 @@ const metadata = {
     items={[
       {
         title:
+          'DEF CON <span class="font-normal"><br />Las Vegas, NV</span> <br /> <span class="text-sm font-normal">August 2025</span>',
+        description: `<b>Incident Response 101: What Happens After The Hack?</b><br />`,
+        icon: 'tabler:microphone-2',
+      },
+      {
+        title:
           'BSides San Diego <span class="font-normal"><br />San Diego, CA</span> <br /> <span class="text-sm font-normal">March 2025</span>',
         description: `<b>From RTFM to BTFM</b><br />`,
         icon: 'tabler:microphone-2',
@@ -224,13 +247,13 @@ const metadata = {
       {
         title:
           'Packet Hacking Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2021-Present</span>',
-        description: `<b>DEF CON 32 (2024):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br /><b>DEF CON 31 (2023):</b><br />Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /><b>DEF CON 30 (2022):</b><br />Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br /><b>DEF CON 29 (2021):</b><br />Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
+        description: `<b>DEF CON 33 (2025):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br />Assisted Hardwired team (training visitors how to terminate RJ45/Ethernet Cables.<br /><b>DEF CON 32 (2024):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br /><b>DEF CON 31 (2023):</b><br />Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /><b>DEF CON 30 (2022):</b><br />Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br /><b>DEF CON 29 (2021):</b><br />Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
         icon: 'tabler:briefcase',
       },
       {
         title:
           'Blue Team Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
-        description: `<b>DEF CON 32 (2024):</b> <br />Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br />Assisted with documentation creation for backend processes within Project Obsidian operations.<br /><b>DEF CON 31 (2023):</b><br />Project Obsidian <br />Presented talk <u><b><a href="/dc31-presentation">(n)map Explorations</a></b></u> based on a Threat Hunt walkthrough.<br />Assisted with Capture the Flag question generation.<br /><b>DEF CON 30 (2022):</b><br />Project Obsidian<br />Presented talk <u><b><a href="/dc30-presentation">Go Phish! Visualizing Basic Malice</a></b></u> based on a Threat Hunt walkthrough.<br /><YouTube id="oXlCyvFed6Q" />`,
+        description: `<b>DEF CON 33 (2025):</b> <br />Presented talk "Incident Response 101: What Happens After the Hack?" for Project Obsidian's Blue Team 101 series of talks. <br />Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br /><br /><b>DEF CON 32 (2024):</b> <br />Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br />Assisted with documentation creation for backend processes within Project Obsidian operations.<br /><b>DEF CON 31 (2023):</b><br />Project Obsidian <br />Presented talk <u><b><a href="/dc31-presentation">(n)map Explorations</a></b></u> based on a Threat Hunt walkthrough.<br />Assisted with Capture the Flag question generation.<br /><b>DEF CON 30 (2022):</b><br />Project Obsidian<br />Presented talk <u><b><a href="/dc30-presentation">Go Phish! Visualizing Basic Malice</a></b></u> based on a Threat Hunt walkthrough.<br /><YouTube id="oXlCyvFed6Q" />`,
         icon: 'tabler:briefcase',
       },
       {
@@ -333,8 +356,8 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Hire me',
-        href: getPermalink('/homes/personal/#contact'),
+        text: 'Book Time with Me!',
+        href: 'https://schedule.ilovesec.com',
       },
     ]}
   />
