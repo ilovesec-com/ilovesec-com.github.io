@@ -1,0 +1,376 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Header from '~/components/widgets/Header.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Content from '~/components/widgets/Content.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import Testimonials from '~/components/widgets/Testimonials.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import { getPermalink } from '~/utils/permalinks';
+import Logo from '~/components/Logo.astro';
+import { YouTube, Tweet, Vimeo } from 'astro-embed';
+
+const metadata = {
+  title: 'Joshua Morgan - Information Security Professional and Instructor',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="announcement"><a class="text-muted hover:underline dark:text-slate-400 font-medium"
+    >I will be at GrrCON 2025! See you there!»</a
+  ></Fragment>
+  <Fragment slot="header">
+    <Header
+      links={[
+{
+      text: 'Home', href: '/'
+    },
+    {
+      text: 'Contact', href: getPermalink('/homes/personal/#contact'),
+      
+      links: [
+        {
+          text: 'Contact Me',
+          href: getPermalink('/homes/personal/#contact'),
+        },
+        {
+          text: 'Book Time with Me!',
+          href: 'https://schedule.ilovesec.com',
+        },
+        ],
+
+    },
+    {
+      text: 'About', href: getPermalink('/homes/personal'),
+      links: [
+        {
+          text: 'Bio',
+          href: getPermalink('/homes/personal/#about'),
+        },
+        {
+          text: 'Security Talks',
+          href: getPermalink('/homes/personal/#presentations'),
+        },
+        {
+          text: 'Sessionize Profile',
+          href: 'https://sessionize.com/joshua-morgan/',
+        },
+        {
+          text: 'Security Community Highlights',
+          href: getPermalink('/homes/personal/#highlights'),
+        },
+        {
+          text: 'Security Certifications',
+          href: getPermalink('/homes/personal/#certs'),
+        },
+        {
+          text: 'Skills',
+          href: getPermalink('/homes/personal/#skills'),
+        },
+      ],
+    },
+    {
+      text: 'Content', href: getPermalink('/homes/personal'),
+      links: [
+        {
+          text: 'Blog',
+          href: getPermalink('category/blog/'),
+          target: '_blank'
+        },
+        {
+          text: 'Videos',
+          href: getPermalink('category/video/'),
+          target: '_blank'
+        },
+        {
+          text: 'SOC Tools',
+          href: 'https://github.com/samunoske/SOC-Tools',
+          target: '_blank'
+        },
+      ],
+    },
+      ]}
+      actions={[
+        {
+          text: 'Book Time with Me!',
+          href: 'https://schedule.ilovesec.com',
+        },
+      ]}
+      isSticky
+      showToggleTheme
+    />
+  </Fragment>
+
+  <!-- Content Widget **************** -->
+
+  <Content
+    id="about"
+    title="Joshua Morgan"
+    tagline="Security Advocate | Trainer | Leader"
+    actions={[{ variant: 'primary', text: 'Book Time with Me!', href: 'https://schedule.ilovesec.com' }]}
+    columns={3}
+    items={[
+      {
+        icon: 'tabler:brand-x',
+        callToAction: {
+          target: '_blank',
+          text: 'Twitter',
+          href: 'https://www.twitter.com/samunoskex',
+        },
+      },
+      {
+        icon: 'tabler:brand-linkedin',
+        callToAction: {
+          target: '_blank',
+          text: 'LinkedIn',
+          href:  'https://www.linkedin.com/in/thejoshuamorgan',
+        },
+      },
+      {
+        icon: 'tabler:brand-mastodon',
+        callToAction: {
+          target: '_blank',
+          text: 'Mastodon',
+          href: 'https://infosec.exchange/@Samunoske',
+        },
+
+      },
+      {
+        icon: 'tabler:brand-bluesky',
+        callToAction: {
+          target: '_blank',
+          text: 'Bluesky',
+          href: 'https://bsky.app/profile/ilovesec.com',
+        },
+
+      },
+      {
+        icon: 'tabler:brand-github',
+        callToAction: {
+          target: '_blank',
+          text: 'Github',
+          href: 'https://github.com/samunoske',
+        },
+
+      },
+      {
+        icon: 'tabler:brand-youtube',
+        callToAction: {
+          target: '_blank',
+          text: 'Odysee (Videos)',
+          href: 'https://odysee.com/@ilovesec:b',
+        },
+
+      },
+    ]}
+    image={{
+      src: '~/assets/images/joshua.png',
+      alt: 'Joshua Morgan - Security Advocate | Trainer | Leader',
+      loading: 'eager',
+    }}
+  >
+    <Fragment slot="content" id="about">
+      <h2 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">About me</h2>
+<p>As an <a href="http://www.linkedin.com/in/thejoshuamorgan/" target="_blank"><u>accomplished security authority</u></a>, I've built a reputation for delivering top-notch security solutions that make a real impact. I have a wealth of knowledge and <a href="#skills"><u>skills</u></a> gained from working in high-level Security Operations Centers. With a Master's degree in Cybersecurity and Information Assurance, I've had the privilege of <a href="/category/video/" target="_blank"><u>sharing my expertise at renowned events like DEF CON and BSides</u></a>.</p>
+<br class="hidden md:inline" />
+<p>Beyond my experience as a security analyst, I'm also passionate about empowering the next generation of cybersecurity professionals through teaching and mentorship. As an instructor for a college Masters-level program, I get to help shape the future of our industry by passing on my knowledge and skills. I am active in the <a href="#highlights"><u>security community</u></a> at conferences and I keep myself sharp by participating in <a href="#ctf"><u>CTFs</u></a> and maintaining relevant <a href="#certs"><u>security-specific certifications</u></a>. With my expertise and experience, I am confident in my ability to provide valuable insight and leadership to any team.</p>
+<br class="hidden md:inline" />
+<p>What drives me is a passion for collaboration, growth, and continuous learning. Whether I'm leading a team, mentoring a colleague, or diving into analysis, my goal is always to provide actionable insights and support that makes a tangible difference. Let's connect and explore how we can work together to secure the future!</p>
+      <br />
+<div id="contact"></div><p>Check out more about me: <br />
+<b><a href="/category/blog/"><u>Blog</u></a> | <a href="/category/video/"><u>Videos</u></a> | <a href="#ctf"><u>CTFs</u></a> | <a href="#presentations"><u>Talks</u></a> | <a href="#highlights"><u>Community</u></a> | <a href="#certs"><u>Certs</u></a> | <a href="#skills"><u>Skills</u></a></b></p><br />
+      <p>If you're curious to dive deeper into my work, you can contact me today!</p><br />
+      <h2 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Contact Me:</h2>
+<b>Email:</b> info@ilovesec.com<br />
+<b>Book Time:</b> <a href="http://schedule.ilovesec.com" target="_blank">Availability Schedule</a><br />
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+  
+  <!-- CallToAction Widget *********** -->
+
+  <CallToAction
+    id="ctf"
+    title="Security Cyber Ranges/Capture The Flags"
+    subtitle="I have participated in some amazing Capture The Flag events. Here are a few:"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Antisyphon Cyber Range ACE-T',
+        target: '_blank',
+        href: 'https://lookup.hackhills.com/?id=2339261',
+      },
+    ]}
+  />
+<!-- Steps Widget ****************** -->
+  <Steps
+    id="presentations"
+    title="Security Conference Presentations"
+    items={[
+      {
+        title:
+          'DEF CON <span class="font-normal"><br />Las Vegas, NV</span> <br /> <span class="text-sm font-normal">August 2025</span>',
+        description: `<b>Incident Response 101: What Happens After The Hack?</b><br />`,
+        icon: 'tabler:microphone-2',
+      },
+      {
+        title:
+          'BSides San Diego <span class="font-normal"><br />San Diego, CA</span> <br /> <span class="text-sm font-normal">March 2025</span>',
+        description: `<b>From RTFM to BTFM</b><br />`,
+        icon: 'tabler:microphone-2',
+      },
+      {
+        title:
+          'DEF CON <span class="font-normal"><br />Las Vegas, NV</span> <br /> <span class="text-sm font-normal">August 2023</span>',
+        description: `<b>(n)map Explorations</b><br /><a href="https://ilovesec.substack.com/p/nmap-exploration-a-great-time-in">Watch nMap Explorations</a><br />`,
+        icon: 'tabler:microphone-2',
+      },
+      {
+        title:
+          'DEF CON <span class="font-normal"><br />Las Vegas, NV</span> <br /> <span class="text-sm font-normal">August 2022</span>',
+        description: `<b>Go Phish! Visualizing Basic Malice</b><br /><a href="https://ilovesec.substack.com/p/go-phish-visualizing-basic-malice">Watch Go Phish!</a><br />`,
+        icon: 'tabler:microphone-2',
+      },
+    ]}
+    classes={{ container: 'max-w-3xl' }}
+  />
+  <Steps
+    id="highlights"
+    title="Security Community Highlights"
+    items={[
+      {
+        title:
+          'Packet Hacking Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2021-Present</span>',
+        description: `<b>DEF CON 33 (2025):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br />Assisted Hardwired team - training guests on how to terminate RJ45/Ethernet Cables.<br /><b>DEF CON 32 (2024):</b><br />Assisted with Packet Inspector/Packet Detective Workshops providing students with guidance and support as necessary.<br /><b>DEF CON 31 (2023):</b><br />Assisted with Walk-Through Workshops providing insight and support for visitors, focusing on Honeypot Workshop using Cowrie.<br /><b>DEF CON 30 (2022):</b><br />Assisted with Walk-Through Workshops, focusing on Network Operating System walkthrough.<br /><b>DEF CON 29 (2021):</b><br />Assisted with Walk-Through Workshops, focusing on Honeypot Walkthroughs using Cowrie.`,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          'Blue Team Village<br /> <span class="font-normal">DEF CON</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
+        description: `<b>DEF CON 33 (2025):</b> <br />Presented talk "Incident Response 101: What Happens After the Hack?" for Project Obsidian's Blue Team 101 series of talks. <br />Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br /><b>DEF CON 32 (2024):</b> <br />Project Obsidian Lead<br />Crafted questions for annual Capture the Flag for Project Obsidian.<br />Assisted with documentation creation for backend processes within Project Obsidian operations.<br /><b>DEF CON 31 (2023):</b><br />Project Obsidian <br />Presented talk <u><b><a href="/dc31-presentation">(n)map Explorations</a></b></u> based on a Threat Hunt walkthrough.<br />Assisted with Capture the Flag question generation.<br /><b>DEF CON 30 (2022):</b><br />Project Obsidian<br />Presented talk <u><b><a href="/dc30-presentation">Go Phish! Visualizing Basic Malice</a></b></u> based on a Threat Hunt walkthrough.<br /><YouTube id="oXlCyvFed6Q" />`,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          'Volunteer Staff <span class="font-normal"><br />GrrCON</span> <br /> <span class="text-sm font-normal">2023-Present</span>',
+        description: `<b>GrrCON 2024:</b><br />Volunteer Team <br />Track Operator Supporting Talk Tracks<br /><b>GrrCON 2023:</b><br />Volunteer Team <br />Track Operator Supporting Talk Tracks`,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          'Volunteer Staff <span class="font-normal"><br />Wild West Hackin Fest</span> <br /> <span class="text-sm font-normal">2022-Present</span>',
+        description: `<b>WWHF Mile High 2025:</b><br /> Volunteer Team<br />A/V Monitor Support, Classroom Setup<br /><b>WWHF 2024:</b><br /> Volunteer Team<br />A/V Monitor Support, Classroom Setup<br /><b>Way West 2022:</b><br /> Volunteer Team<br />Moderator/Support for Resume Workshop Class`,
+        icon: 'tabler:briefcase',
+      },
+      {
+        title:
+          'Volunteer Staff <span class="font-normal"><br />ShellCon</span> <br /> <span class="text-sm font-normal">2021</span>',
+        description: `<b>ShellCon 2021</b><br /> Volunteer Team <br />Moderator/Support for Resume Workshop Class`,
+        icon: 'tabler:briefcase',
+      },
+    ]}
+    classes={{ container: 'max-w-3xl' }}
+  />
+
+  <!-- Features3 Widget ************** -->
+  <Features3
+    title="Professional Security Certifications"
+    id="certs"
+    subtitle="See my Security-relevant certifications"
+    columns={3}
+    defaultIcon="tabler:chevrons-up"
+    items={[
+      {
+        title: 'CompTIA Security Analytics Professional (CSAP)',
+        description: 'Earners of this certification are security analytics professionals that have the ability to plan and carry out security measures to protect an organization’s computer networks and systems.',
+      },
+      {
+        title: 'GIAC GSEC',
+        description: 'A cybersecurity certification that certifies a professionals knowledge of information security beyond simple terminology and concepts and ability to perform hands-on IT system security roles',
+      },
+      {
+        title: 'CompTIA Cybersecurity Analyst+ (CySA+)',
+        description: 'For cyber professionals tasked with incident detection prevention and response through continuous security monitoring',
+      },
+      {
+        title: 'CompTIA Security+',
+        description: 'A global certification that validates the baseline skills necessary to perform core security functions and pursue an IT security career',
+      },
+      {
+        title: 'CompTIA Linux Network Professional (CLNP)',
+        description: 'Earners of this certification are Linux network professionals that are able to provide hands-on support and to monitor critical internal and client systems.',
+      },
+      {
+        title: 'CompTIA Project+',
+        description: 'For IT Pros this shows the skills they need to successfully manage small to medium-sized projects',
+      },
+    ]}
+  />
+
+  <!-- Features3 Widget ************** -->
+  <Features3
+    title="Skills"
+    id="skills"
+    subtitle="Discover my skills"
+    columns={3}
+    defaultIcon="tabler:point-filled"
+    items={[
+      {
+        title: 'SOC Runbook Design',
+        description: 'Creating and designing procedures aimed at increasing flexibility and efficiency within the Security Operations Center.',
+      },
+      {
+        title: 'Incident Response and Investigation',
+        description: 'Responding to information security incidents and assisting with recovery efforts',
+      },
+      {
+        title: 'SOC Automation',
+        description: 'Increasing productivity and throughput of SOC efforts with automated actions utilizing existing platforms.',
+      },
+      {
+        title: 'Security Training',
+        description: 'Breaking down complex topics pertaining to security to help train new or existing staff.',
+      },
+      {
+        title: 'Vendor Management',
+        description: 'Building sustainable relationships with vendors to maximize return on investment.',
+      },
+      {
+        title: 'Creative Solutions',
+        description: 'You might not have exactly what you need to do what you want to do. I can try to find a way to accomplish it with what you have.',
+      },
+    ]}
+  />
+
+  <!-- CallToAction Widget *********** -->
+
+  <CallToAction
+    title="Get Secure"
+    subtitle="Ready to take your security program to the next level?"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Book Time with Me!',
+        href: 'https://schedule.ilovesec.com',
+      },
+    ]}
+  />
+
+  <!-- BlogLatestPost Widget **************** -->
+
+  <BlogLatestPosts
+    id="blog"
+    title="Check out the blog!"
+    information={`Some thoughts and observations`}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </BlogLatestPosts>
+</Layout>
