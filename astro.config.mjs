@@ -94,13 +94,9 @@ export default defineConfig({
 
 
   redirects: {
-    '/': {
-      status: 302,
-      destination: '/homes/personal/#about'
-    },    
     '/about.html': {
       status: 302,
-      destination: '/homes/personal/#about'
+      destination: '/#about'
     },
     '/about/': {
       status: 302,
