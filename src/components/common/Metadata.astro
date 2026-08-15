@@ -1,8 +1,5 @@
 ---
 import merge from 'lodash.merge';
-import { AstroSeo } from '@astrolib/seo';
-
-import type { Props as AstroSeoProps } from '@astrolib/seo';
 
 import { SITE, METADATA, I18N } from 'astrowind:config';
 import type { MetaData } from '~/types';
@@ -24,45 +21,80 @@ const {
   twitter = {},
 } = Astro.props;
 
-const seoProps: AstroSeoProps = merge(
-  {
-    title: '',
-    titleTemplate: '%s',
-    canonical: canonical,
-    noindex: true,
-    nofollow: true,
-    description: undefined,
-    openGraph: {
-      url: canonical,
-      site_name: SITE?.name,
-      images: [],
-      locale: I18N?.language || 'en',
-      type: 'website',
-    },
-    twitter: {
-      cardType: openGraph?.images?.length ? 'summary_large_image' : 'summary',
-    },
-  },
+const merged = merge(
   {
     title: METADATA?.title?.default,
     titleTemplate: METADATA?.title?.template,
-    noindex: typeof METADATA?.robots?.index !== 'undefined' ? !METADATA.robots.index : undefined,
-    nofollow: typeof METADATA?.robots?.follow !== 'undefined' ? !METADATA.robots.follow : undefined,
     description: METADATA?.description,
     openGraph: METADATA?.openGraph,
     twitter: METADATA?.twitter,
   },
-  {
-    title: title,
-    titleTemplate: ignoreTitleTemplate ? '%s' : undefined,
-    canonical: canonical,
-    noindex: typeof robots?.index !== 'undefined' ? !robots.index : undefined,
-    nofollow: typeof robots?.follow !== 'undefined' ? !robots.follow : undefined,
-    description: description,
-    openGraph: { url: canonical, ...openGraph },
-    twitter: twitter,
-  }
+  { title, canonical, description, openGraph, twitter }
 );
+
+const titleTemplate = ignoreTitleTemplate ? undefined : merged.titleTemplate;
+const pageTitle = merged.title;
+const finalTitle =
+  pageTitle && titleTemplate && !ignoreTitleTemplate
+    ? titleTemplate.replace('%s', pageTitle)
+    : pageTitle || METADATA?.title?.default || SITE?.name || '';
+
+const finalDescription = merged.description || METADATA?.description || '';
+
+const noindex = (robots?.index ?? METADATA?.robots?.index) === false;
+const nofollow = (robots?.follow ?? METADATA?.robots?.follow) === false;
+
+const canonicalUrl = canonical;
+
+const openGraphResult = (await adaptOpenGraphImages(
+  {
+    url: merged?.openGraph?.url || canonicalUrl,
+    siteName: merged?.openGraph?.siteName || SITE?.name,
+    locale: merged?.openGraph?.locale || I18N?.language || 'en',
+    type: merged?.openGraph?.type || 'website',
+    images: merged?.openGraph?.images || [],
+  },
+  Astro.site
+)) as {
+  url?: string;
+  siteName?: string;
+  locale?: string;
+  type?: string;
+  images?: Array<{ url?: string; width?: number; height?: number }>;
+};
+
+const twitterCard =
+  merged?.twitter?.cardType || (openGraphResult?.images?.length ? 'summary_large_image' : 'summary');
+const twitterSite = merged?.twitter?.site;
+const twitterHandle = merged?.twitter?.handle;
 ---
 
-<AstroSeo {...{ ...seoProps, openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site) }} />
+<title>{finalTitle}</title>
+<meta name="description" content={finalDescription} />
+<meta name="generator" content={Astro.generator} />
+<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content={`${noindex ? 'noindex' : 'index'},${nofollow ? 'nofollow' : 'follow'}`} />
+
+<meta property="og:title" content={pageTitle || finalTitle} />
+<meta property="og:description" content={finalDescription} />
+<meta property="og:url" content={openGraphResult?.url} />
+<meta property="og:site_name" content={openGraphResult?.siteName} />
+<meta property="og:type" content={openGraphResult?.type} />
+<meta property="og:locale" content={openGraphResult?.locale} />
+
+{openGraphResult?.images?.map((image) => (
+  <>
+    <meta property="og:image" content={image?.url} />
+    {image?.width ? <meta property="og:image:width" content={String(image.width)} /> : null}
+    {image?.height ? <meta property="og:image:height" content={String(image.height)} /> : null}
+  </>
+))}
+
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={pageTitle || finalTitle} />
+<meta name="twitter:description" content={finalDescription} />
+{twitterSite ? <meta name="twitter:site" content={twitterSite} /> : null}
+{twitterHandle ? <meta name="twitter:creator" content={twitterHandle} /> : null}
+{openGraphResult?.images?.map((image) =>
+  image?.url ? <meta name="twitter:image" content={image.url} /> : null
+)}

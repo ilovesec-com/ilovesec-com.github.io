@@ -1,14 +1,15 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { defineConfig, squooshImageService } from 'astro/config';
+import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import compress from 'astro-compress';
+import tailwindcss from '@tailwindcss/vite';
 
 import astrowind from './vendor/integration';
 
@@ -28,9 +29,6 @@ export default defineConfig({
   output: 'static',
 
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     sitemap(),
     mdx(),
     icon({
@@ -75,23 +73,25 @@ export default defineConfig({
   ],
 
   image: {
-    service: squooshImageService(),
     domains: ['cdn.pixabay.com'],
   },
 
+  compressHTML: true,
+
   markdown: {
+    processor: unified(),
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, lazyImagesRehypePlugin],
   },
 
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),
       },
     },
   },
-
 
   redirects: {
     '/about.html': {

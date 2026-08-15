@@ -10,22 +10,31 @@ import type { MetaData } from '~/types';
 
 export interface Props {
   metadata?: MetaData;
+  fullScreen?: boolean;
 }
 
-const { metadata } = Astro.props;
+const { metadata, fullScreen = false } = Astro.props;
 ---
 
 <Layout metadata={metadata}>
-  <slot name="announcement">
-    <Announcement />
-  </slot>
-  <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme />
-  </slot>
-  <main>
-    <slot />
-  </main>
-  <slot name="footer">
-    <Footer {...footerData} />
-  </slot>
+  <div class:list={[fullScreen ? 'flex h-dvh min-h-0 flex-col overflow-hidden' : '']}>
+    <div class:list={[{ 'flex-none': fullScreen }]}>
+      <slot name="announcement">
+        <Announcement />
+      </slot>
+    </div>
+    <div class:list={[{ 'flex-none': fullScreen }]}>
+      <slot name="header">
+        <Header {...headerData} isSticky showRssFeed showToggleTheme />
+      </slot>
+    </div>
+    <main class:list={[fullScreen ? 'flex-1 min-h-0 overflow-hidden flex flex-col' : '']}>
+      <slot />
+    </main>
+    <div class:list={[{ 'flex-none': fullScreen }]}>
+      <slot name="footer">
+        <Footer {...footerData} compact={fullScreen} />
+      </slot>
+    </div>
+  </div>
 </Layout>

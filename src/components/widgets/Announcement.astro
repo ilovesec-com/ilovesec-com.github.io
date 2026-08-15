@@ -1,14 +1,60 @@
 ---
-
 ---
-
 <div
-  class="dark text-muted text-sm bg-black dark:bg-transparent dark:border-b dark:border-slate-800 dark:text-slate-400 hidden md:flex gap-1 overflow-hidden px-3 py-2 relative text-ellipsis whitespace-nowrap"
+  data-aw-announcement
+  class="relative flex items-center gap-1 overflow-hidden px-3 py-2 text-muted text-sm bg-black dark:bg-transparent dark:border-b dark:border-slate-800 dark:text-slate-400"
 >
-  <span
-    class="dark:bg-slate-700 bg-white/40 dark:text-slate-300 font-semibold px-1 py-0.5 text-xs mr-0.5 rtl:mr-0 rtl:ml-0.5 inline-block"
-    >NEW</span
+  <div class="flex items-center gap-1 flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+    <slot>
+      <span
+        class="dark:bg-slate-700 bg-white/40 dark:text-slate-300 font-semibold px-1 py-0.5 text-xs mr-0.5 rtl:mr-0 rtl:ml-0.5 inline-block"
+        >NEW</span
+      >
+      <a rel="me" href="https://infosec.exchange/@Samunoske" class="text-muted hover:underline dark:text-slate-400 font-medium">Mastodon</a>
+    </slot>
+  </div>
+  <button
+    type="button"
+    data-aw-announcement-close
+    aria-label="Dismiss announcement"
+    class="ml-2 flex-none w-6 h-6 rounded-full flex items-center justify-center text-lg leading-none cursor-pointer hover:bg-white/20 dark:hover:bg-slate-700"
   >
-<a rel="me" href="https://infosec.exchange/@Samunoske" class="text-muted hover:underline dark:text-slate-400 font-medium">Mastodon</a>
-
+    ×
+  </button>
 </div>
+
+<script>
+  (() => {
+    const bar = document.querySelector('[data-aw-announcement]');
+    if (!bar) return;
+
+    let hash = 0;
+    const text = bar.textContent?.trim() || '';
+    for (let i = 0; i < text.length; i++) {
+      hash = (hash << 5) - hash + text.charCodeAt(i);
+      hash |= 0;
+    }
+    const key = `ilovesec-announcement-dismissed-${Math.abs(hash)}`;
+
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem(key) === '1';
+    } catch {
+      /* ignore */
+    }
+
+    if (dismissed) {
+      bar.remove();
+      return;
+    }
+
+    bar.querySelector('[data-aw-announcement-close]')?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(key, '1');
+      } catch {
+        /* ignore */
+      }
+      bar.remove();
+    });
+  })();
+</script>

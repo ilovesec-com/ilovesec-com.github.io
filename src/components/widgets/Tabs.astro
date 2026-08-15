@@ -1,0 +1,149 @@
+---
+import { twMerge } from 'tailwind-merge';
+
+interface TabItem {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  tabs: TabItem[];
+  defaultTab?: string;
+  panelClass?: string;
+  fillViewport?: boolean;
+}
+
+const {
+  tabs,
+  defaultTab = tabs[0]?.id,
+  fillViewport = false,
+  panelClass = fillViewport
+    ? 'flex-1 min-h-0 overflow-y-auto overscroll-contain'
+    : 'max-h-[62vh] overflow-y-auto overscroll-contain scroll-mt-[72px]',
+} = Astro.props;
+---
+
+<div
+  data-tabs
+  class:list={[
+    'relative mx-auto w-full px-4 md:px-6 pt-5 md:pt-7 pb-8 md:pb-12',
+    fillViewport ? 'h-full min-h-0 flex flex-col' : '',
+  ]}
+>
+  <div
+    role="tablist"
+    aria-label="Page sections"
+    class:list={['flex flex-nowrap gap-2 mb-6 overflow-x-auto overscroll-contain scroll-px-4', fillViewport ? 'shrink-0' : '']}
+  >
+    {
+      tabs.map((tab) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${tab.id}`}
+          aria-selected={tab.id === defaultTab ? 'true' : 'false'}
+          aria-controls={`panel-${tab.id}`}
+          data-tab-trigger={tab.id}
+          class="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-slate-300 dark:border-slate-700 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          {tab.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class:list={[fillViewport ? 'flex-1 min-h-0 flex flex-col' : '']}>
+    {
+      tabs.map((tab) => (
+        <div
+          id={tab.id}
+          role="tabpanel"
+          aria-labelledby={`tab-${tab.id}`}
+          data-tab-panel={tab.id}
+          hidden={tab.id !== defaultTab}
+          class={twMerge('not-prose', panelClass)}
+        >
+          <slot name={tab.id} />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style is:inline>
+  [data-tab-trigger][aria-selected='true'] {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
+  }
+</style>
+
+<script>
+  (() => {
+    const ALIAS: Record<string, string> = {};
+
+    const normalize = (h: string) => (h.length > 1 ? h.slice(1) : '');
+
+    const activate = (root: HTMLElement, id: string) => {
+      if (!root.querySelector(`[data-tab-trigger="${id}"]`)) return;
+      root.querySelectorAll<HTMLElement>('[data-tab-trigger]').forEach((trigger) => {
+        const on = trigger.dataset.tabTrigger === id;
+        trigger.setAttribute('aria-selected', String(on));
+      });
+      root.querySelectorAll<HTMLElement>('[data-tab-panel]').forEach((panel) => {
+        const on = panel.dataset.tabPanel === id;
+        panel.hidden = !on;
+        if (on) panel.scrollTop = 0;
+      });
+    };
+
+    const handleHash = () => {
+      const h = normalize(window.location.hash);
+      if (!h) return;
+      const id = ALIAS[h] || h;
+      const target = document.getElementById(h);
+      const panel = target?.closest<HTMLElement>('[data-tab-panel]');
+      document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+        if (!root.querySelector(`[data-tab-trigger="${id}"]`)) return;
+        activate(root, id);
+        if (panel) {
+          panel.scrollTop = target.offsetTop - panel.offsetTop;
+          panel.scrollIntoView({ block: 'nearest' });
+        }
+      });
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+      const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab-trigger]'));
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          const id = trigger.dataset.tabTrigger as string;
+          activate(root, id);
+          try {
+            history.replaceState(null, '', `#${id}`);
+          } catch {
+            /* ignore */
+          }
+        });
+
+        trigger.addEventListener('keydown', (event) => {
+          if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          const index = triggers.indexOf(trigger);
+          let next = index;
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % triggers.length;
+          else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + triggers.length) % triggers.length;
+          else if (event.key === 'Home') next = 0;
+          else if (event.key === 'End') next = triggers.length - 1;
+          triggers[next].focus();
+          activate(root, triggers[next].dataset.tabTrigger as string);
+        });
+      });
+    });
+
+    window.addEventListener('hashchange', handleHash);
+    handleHash();
+  })();
+</script>

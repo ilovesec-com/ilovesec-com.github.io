@@ -1,8 +1,6 @@
 ---
 import { APP_BLOG } from 'astrowind:config';
 
-import Grid from '~/components/blog/Grid.astro';
-
 import { getBlogPermalink } from '~/utils/permalinks';
 import { findLatestPosts } from '~/utils/blog';
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
@@ -15,7 +13,18 @@ export interface Props extends Widget {
   linkUrl?: string | URL;
   information?: string;
   count?: number;
+  substackUrl?: string;
 }
+
+type SubstackPost = {
+  title: string;
+  subtitle: string | null;
+  slug: string;
+  post_date: string;
+  canonical_url: string;
+  cover_image: string | null;
+  truncated_body_text: string | null;
+};
 
 const {
   title = await Astro.slots.render('title'),
@@ -23,6 +32,7 @@ const {
   linkUrl = getBlogPermalink(),
   information = await Astro.slots.render('information'),
   count = 4,
+  substackUrl = 'https://ilovesec.substack.com',
 
   id,
   isDark = false,
@@ -30,49 +40,95 @@ const {
   bg = await Astro.slots.render('bg'),
 } = Astro.props;
 
-const posts = APP_BLOG.isEnabled ? await findLatestPosts({ count }) : [];
+const localPosts = APP_BLOG.isEnabled ? await findLatestPosts({ count }) : [];
+
+let feed: SubstackPost[] = [];
+try {
+  const res = await fetch(`${substackUrl}/api/v1/archive?limit=${count}&sort=new&offset=0`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (res.ok) {
+    feed = (await res.json()) as SubstackPost[];
+  }
+} catch {
+  /* build-time network/parse failure — fall back to local posts */
+}
+
+const posts = feed.length ? feed : [];
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
-{
-  APP_BLOG.isEnabled ? (
-    <WidgetWrapper id={id} isDark={isDark} containerClass={classes?.container as string} bg={bg}>
-      <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
-        {title && (
-          <div class="md:max-w-sm">
-            <h2
-              class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
-              set:html={title}
-            />
-            {APP_BLOG.list.isEnabled && linkText && linkUrl && (
-              <Button variant="link" href={linkUrl}>
-                {' '}
-                {linkText} »
-              </Button>
-            )}
-          </div>
+<WidgetWrapper id={id} isDark={isDark} containerClass={classes?.container as string} bg={bg}>
+  <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
+    {title && (
+      <div class="md:max-w-sm">
+        <h2
+          class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
+          set:html={title}
+        />
+        {linkText && linkUrl && (
+          <Button variant="link" href={linkUrl}>
+            {' '}
+            {linkText} »
+          </Button>
         )}
-
-        {information && <p class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md" set:html={information} />}
       </div>
+    )}
 
-<div id="substack-feed-embed"></div>
-<div></div>
-<script>
-window.SubstackFeedWidget = {
-substackUrl: "ilovesec.substack.com",
-posts: 3,
-layout: "center",
-colors: {
-primary: "#FFFFFF",
-secondary: "#BEBEBE",
-background: "#030620",
-}
-};
-</script>
-<script src="https://substackapi.com/embeds/feed.js" async></script>
+    {information && <p class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md" set:html={information} />}
+  </div>
 
-    </WidgetWrapper>
-  ) : (
-    <Fragment />
-  )
-}
+  {
+    posts.length ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {posts.map((post) => (
+          <a
+            href={post.canonical_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 hover:border-primary transition"
+          >
+            {post.cover_image && (
+              <img
+                src={post.cover_image}
+                alt={post.title}
+                loading="lazy"
+                class="aspect-[16/9] w-full object-cover"
+              />
+            )}
+            <div class="flex flex-1 flex-col p-3">
+              <p class="text-[11px] font-semibold uppercase tracking-wide text-secondary dark:text-blue-200">
+                {formatDate(post.post_date)}
+              </p>
+              <h3 class="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-primary">
+                {post.title}
+              </h3>
+              {(post.subtitle || post.truncated_body_text) && (
+                <p class="mt-1.5 text-xs text-muted line-clamp-2">{post.subtitle || post.truncated_body_text}</p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : localPosts.length ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {localPosts.map((post) => (
+          <a
+            href={getBlogPermalink(post.slug)}
+            class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 hover:border-primary transition"
+          >
+            <div class="flex flex-1 flex-col p-4">
+              <h3 class="mt-1 text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-primary">
+                {post.title}
+              </h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      ''
+    )
+  }
+</WidgetWrapper>

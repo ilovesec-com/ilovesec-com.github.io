@@ -1,0 +1,113 @@
+---
+interface BladeItem {
+  label: string;
+  content: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  items: BladeItem[];
+  classes?: Record<string, string>;
+}
+
+const { title, subtitle, items = [], classes = {} } = Astro.props;
+---
+
+<div class:list={[classes?.container ?? '', 'w-full mx-auto']}>
+  {
+    title && (
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold tracking-tight dark:text-white">{title}</h2>
+        {subtitle && <p class="mt-2 text-muted dark:text-slate-400">{subtitle}</p>}
+      </div>
+    )
+  }
+
+  <div data-blades class="flex flex-col md:flex-row gap-5">
+    <div
+      role="tablist"
+      aria-label="Blades"
+      class="blade-stack flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:w-52 shrink-0 md:pt-2"
+    >
+      {
+        items.map((item, index) => (
+          <button
+            type="button"
+            role="tab"
+            data-blade={index}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            class="blade relative flex items-center gap-2 whitespace-nowrap rounded-lg border px-4 py-3 text-sm font-semibold text-left transition border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          >
+            <span class="blade-notch inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500"></span>
+            {item.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="flex-1 min-w-0">
+      {
+        items.map((item, index) => (
+          <div
+            data-blade-panel={index}
+            role="tabpanel"
+            hidden={index !== 0}
+            class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40 p-4 sm:p-6 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
+            set:html={item.content}
+          />
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style is:inline>
+  [data-blade][aria-selected='true'] {
+    background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
+    border-color: transparent;
+    color: #fff;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.25),
+      0 0 18px -2px rgb(109 40 217 / 0.55);
+  }
+  [data-blade][aria-selected='true'] .blade-notch {
+    background: #ffffff;
+    box-shadow: 0 0 6px rgb(255 255 255 / 0.9);
+  }
+  html.dark [data-blade][aria-selected='true'] {
+    background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+  }
+</style>
+
+<script>
+  (() => {
+    document.querySelectorAll<HTMLElement>('[data-blades]').forEach((root) => {
+      const blades = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-blade]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-blade-panel]'));
+
+      const activate = (index: number) => {
+        blades.forEach((blade, i) => blade.setAttribute('aria-selected', String(i === index)));
+        panels.forEach((panel, i) => {
+          panel.hidden = i !== index;
+        });
+      };
+
+      blades.forEach((blade, index) => {
+        blade.addEventListener('click', () => activate(index));
+
+        blade.addEventListener('keydown', (event) => {
+          if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let next = index;
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % blades.length;
+          else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + blades.length) % blades.length;
+          else if (event.key === 'Home') next = 0;
+          else if (event.key === 'End') next = blades.length - 1;
+          blades[next].focus();
+          activate(next);
+        });
+      });
+    });
+  })();
+</script>

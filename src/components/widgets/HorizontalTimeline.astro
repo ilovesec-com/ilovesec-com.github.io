@@ -1,0 +1,297 @@
+---
+interface Group {
+  name: string;
+  items?: Array<string>;
+}
+
+interface Month {
+  month: string;
+  groups: Array<Group>;
+}
+
+interface TimelineEntry {
+  date: string;
+  title: string;
+  description?: string;
+  titleShort?: string;
+  groups?: Array<Group>;
+  months?: Array<Month>;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  items: Array<TimelineEntry>;
+  defaultActive?: number;
+  classes?: Record<string, string>;
+}
+
+const {
+  title,
+  subtitle,
+  items = [],
+  defaultActive = 0,
+  classes = {},
+} = Astro.props;
+---
+
+<div class:list={[classes?.container ?? '', 'w-full mx-auto']}>
+  {
+    title && (
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold tracking-tight dark:text-white">{title}</h2>
+        {subtitle && <p class="mt-2 text-muted dark:text-slate-400">{subtitle}</p>}
+      </div>
+    )
+  }
+
+  <div data-tl-root>
+    <div class="overflow-x-auto">
+      <div class="timeline-track relative min-w-max md:w-full">
+        <div class="absolute left-4 right-4 top-[32px] h-0.5 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+        <div class="relative flex items-start gap-6 md:gap-0 md:justify-between px-2">
+          {
+            items.map((item, index) => (
+              <button
+                type="button"
+                data-tl-item={index}
+                aria-expanded={index === defaultActive ? 'true' : 'false'}
+                class="group flex flex-col items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              >
+                <span class="timeline-date text-xs font-semibold whitespace-nowrap text-slate-500 dark:text-slate-400">
+                  {item.date}
+                </span>
+                <span class="timeline-dot h-4 w-4 rounded-full border-2 border-primary bg-white dark:bg-slate-800"></span>
+                {
+                  item.titleShort && (
+                    <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500">{item.titleShort}</span>
+                  )
+                }
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      {
+        items.map((item, index) => {
+          const chips = item.months
+            ? item.months.map((m, i) => ({ label: m.month, index: i }))
+            : item.groups
+              ? item.groups.map((g, i) => ({ label: g.name, index: i }))
+              : [];
+
+          return chips.length ? (
+            <div data-tl-chips={index} hidden={index !== defaultActive} class="flex flex-wrap gap-2">
+              {
+                chips.map((chip) => (
+                  <button
+                    type="button"
+                    data-tl-year={index}
+                    data-tl-chip={chip.index}
+                    aria-pressed={index === defaultActive && chip.index === 0 ? 'true' : 'false'}
+                    class="timeline-chip rounded-full border border-slate-300 dark:border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                  >
+                    {chip.label}
+                  </button>
+                ))
+              }
+            </div>
+          ) : null;
+        })
+      }
+    </div>
+
+    <div class="mt-6">
+      {
+        items.map((item, index) => {
+          if (item.months && item.months.length) {
+            return item.months.map((month, monthIndex) => (
+              <div
+                data-tl-panel
+                data-tl-year={index}
+                data-tl-chip={monthIndex}
+                hidden={index !== defaultActive || monthIndex !== 0}
+                class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40 p-4 sm:p-6"
+              >
+                {
+                  month.groups.length === 1 ? (
+                    <Fragment>
+                      <h3 class="mb-3 text-lg font-bold text-slate-800 dark:text-slate-100">{month.groups[0].name}</h3>
+                      {
+                        month.groups[0].items?.length ? (
+                          <ul class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 list-disc pl-5 space-y-1">
+                            {month.groups[0].items.map((item) => <li set:html={item} />)}
+                          </ul>
+                        ) : (
+                          ''
+                        )
+                      }
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <h3 class="mb-4 text-lg font-bold text-slate-800 dark:text-slate-100">
+                        {month.month} {item.date}
+                      </h3>
+                      {
+                        month.groups.map((group) => (
+                          <div class="mb-4 last:mb-0">
+                            <p class="mb-1 text-sm font-semibold text-slate-700 dark:text-slate-200">{group.name}</p>
+                            {
+                              group.items?.length ? (
+                                <ul class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 list-disc pl-5 space-y-1">
+                                  {group.items.map((item) => <li set:html={item} />)}
+                                </ul>
+                              ) : (
+                                ''
+                              )
+                            }
+                          </div>
+                        ))
+                      }
+                    </Fragment>
+                  )
+                }
+              </div>
+            ));
+          }
+
+          if (item.groups && item.groups.length) {
+            return item.groups.map((group, groupIndex) => (
+              <div
+                data-tl-panel
+                data-tl-year={index}
+                data-tl-chip={groupIndex}
+                hidden={index !== defaultActive || groupIndex !== 0}
+                class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40 p-4 sm:p-6"
+              >
+                <h3 class="mb-3 text-lg font-bold text-slate-800 dark:text-slate-100">{group.name}</h3>
+                {
+                  group.items?.length ? (
+                    <ul class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 list-disc pl-5 space-y-1">
+                      {group.items.map((item) => <li set:html={item} />)}
+                    </ul>
+                  ) : (
+                    ''
+                  )
+                }
+              </div>
+            ));
+          }
+
+          return (
+            <div
+              data-tl-panel
+              data-tl-year={index}
+              hidden={index !== defaultActive}
+              class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40 p-4 sm:p-6"
+            >
+              <h3 class="mb-3 text-lg font-bold text-slate-800 dark:text-slate-100">{item.title}</h3>
+              {item.description && (
+                <div class="text-sm leading-relaxed text-slate-600 dark:text-slate-300" set:html={item.description} />
+              )}
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
+
+<style is:inline>
+  .timeline-dot {
+    transition: background-color 200ms ease;
+  }
+  [data-tl-item][aria-expanded='true'] .timeline-dot {
+    background-color: var(--color-primary);
+  }
+  [data-tl-item][aria-expanded='true'] .timeline-date {
+    color: var(--color-primary);
+  }
+  html.dark [data-tl-item][aria-expanded='true'] .timeline-dot {
+    background-color: rgb(59 130 246 / 1);
+  }
+  html.dark [data-tl-item][aria-expanded='true'] .timeline-date {
+    color: rgb(96 165 250 / 1);
+  }
+  [data-tl-chip][aria-pressed='true'] {
+    background-color: var(--color-primary);
+    border-color: transparent;
+    color: #fff;
+  }
+  html.dark [data-tl-chip][aria-pressed='true'] {
+    background-color: rgb(59 130 246 / 1);
+    color: #fff;
+  }
+</style>
+
+<script>
+  (() => {
+    document.querySelectorAll<HTMLElement>('[data-tl-root]').forEach((root) => {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tl-item]'));
+      const chipRows = Array.from(root.querySelectorAll<HTMLElement>('[data-tl-chips]'));
+      const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('button[data-tl-chip]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-tl-panel]'));
+
+      const activate = (index: number, chipIndex: number | null) => {
+        buttons.forEach((button, i) => {
+          button.setAttribute('aria-expanded', String(i === index));
+        });
+        chipRows.forEach((row) => {
+          row.hidden = Number(row.dataset.tlChips) !== index;
+        });
+        chips.forEach((chip) => {
+          const onYear = Number(chip.dataset.tlYear) === index;
+          const onChip = chipIndex !== null && Number(chip.dataset.tlChip) === chipIndex;
+          chip.setAttribute('aria-pressed', String(onYear && onChip));
+        });
+        panels.forEach((panel) => {
+          const onYear = Number(panel.dataset.tlYear) === index;
+          const onChip =
+            panel.dataset.tlChip === undefined || (chipIndex !== null && Number(panel.dataset.tlChip) === chipIndex);
+          panel.hidden = !(onYear && onChip);
+        });
+      };
+
+      buttons.forEach((button, index) => {
+        button.addEventListener('click', () => activate(index, 0));
+
+        button.addEventListener('keydown', (event) => {
+          if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let next = index;
+          if (event.key === 'ArrowRight') next = (index + 1) % buttons.length;
+          else if (event.key === 'ArrowLeft') next = (index - 1 + buttons.length) % buttons.length;
+          else if (event.key === 'Home') next = 0;
+          else if (event.key === 'End') next = buttons.length - 1;
+          buttons[next].focus();
+          activate(next, 0);
+        });
+      });
+
+      chips.forEach((chip) => {
+        const year = Number(chip.dataset.tlYear);
+        const chipIndex = Number(chip.dataset.tlChip);
+
+        chip.addEventListener('click', () => activate(year, chipIndex));
+
+        chip.addEventListener('keydown', (event) => {
+          if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          const row = chip.closest<HTMLElement>('[data-tl-chips]');
+          if (!row) return;
+          const siblings = Array.from(row.querySelectorAll<HTMLButtonElement>('button[data-tl-chip]'));
+          let next = chipIndex;
+          if (event.key === 'ArrowRight') next = (chipIndex + 1) % siblings.length;
+          else if (event.key === 'ArrowLeft') next = (chipIndex - 1 + siblings.length) % siblings.length;
+          else if (event.key === 'Home') next = 0;
+          else if (event.key === 'End') next = siblings.length - 1;
+          siblings[next].focus();
+          activate(year, next);
+        });
+      });
+    });
+  })();
+</script>

@@ -52,6 +52,11 @@ export const getPermalink = (slug = '', type = 'page'): string => {
     return slug;
   }
 
+  if (slug.includes('#')) {
+    const [path, hash] = slug.split('#');
+    return `${getPermalink(path, type)}#${hash}`;
+  }
+
   switch (type) {
     case 'home':
       permalink = getHomePermalink();
