@@ -13,6 +13,7 @@ export interface Props extends Widget {
   linkUrl?: string | URL;
   information?: string;
   count?: number;
+  all?: boolean;
   substackUrl?: string;
 }
 
@@ -32,6 +33,7 @@ const {
   linkUrl = getBlogPermalink(),
   information = await Astro.slots.render('information'),
   count = 4,
+  all = false,
   substackUrl = 'https://ilovesec.substack.com',
 
   id,
@@ -44,11 +46,25 @@ const localPosts = APP_BLOG.isEnabled ? await findLatestPosts({ count }) : [];
 
 let feed: SubstackPost[] = [];
 try {
-  const res = await fetch(`${substackUrl}/api/v1/archive?limit=${count}&sort=new&offset=0`, {
-    headers: { Accept: 'application/json' },
-  });
-  if (res.ok) {
-    feed = (await res.json()) as SubstackPost[];
+  if (all) {
+    let offset = 0;
+    while (true) {
+      const res = await fetch(`${substackUrl}/api/v1/archive?limit=50&sort=new&offset=${offset}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) break;
+      const batch = (await res.json()) as SubstackPost[];
+      feed = feed.concat(batch);
+      if (batch.length < 50) break;
+      offset += 50;
+    }
+  } else {
+    const res = await fetch(`${substackUrl}/api/v1/archive?limit=${count}&sort=new&offset=0`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (res.ok) {
+      feed = (await res.json()) as SubstackPost[];
+    }
   }
 } catch {
   /* build-time network/parse failure — fall back to local posts */
