@@ -764,18 +764,18 @@ const certs: CertItem[] = [
           />
           <div>
             <p class="mb-2"><b>Email:</b> <a href="mailto:info@ilovesec.com">info@ilovesec.com</a></p>
-            <p class="mb-6"><b>Book Time:</b> <a href="https://schedule.ilovesec.com" target="_blank">Availability Schedule</a></p>
+            <p class="mb-3"><b>Book Time:</b> <a href="https://schedule.ilovesec.com" target="_blank">Availability Schedule</a></p>
+            <ItemGrid
+              items={socials}
+              columns={3}
+              classes={{
+                container: 'gap-y-2 md:gap-y-4 mb-0',
+                panel: 'max-w-none',
+                action: 'text-base font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
+              }}
+            />
           </div>
         </div>
-        <ItemGrid
-          items={socials}
-          columns={3}
-          classes={{
-            container: 'gap-y-4 md:gap-y-8 mb-4',
-            panel: 'max-w-none',
-            action: 'text-base font-medium leading-6 dark:text-white ml-2 rtl:ml-0 rtl:mr-2',
-          }}
-        />
       </div>
     </Fragment>
 
