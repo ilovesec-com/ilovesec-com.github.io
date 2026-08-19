@@ -30,26 +30,29 @@ const {
     fillViewport ? 'h-full min-h-0 flex flex-col' : '',
   ]}
 >
-  <div
-    role="tablist"
-    aria-label="Page sections"
-    class:list={['flex flex-nowrap gap-2 mb-6 overflow-x-auto overscroll-contain scroll-px-4', fillViewport ? 'shrink-0' : '']}
-  >
-    {
-      tabs.map((tab) => (
-        <button
-          type="button"
-          role="tab"
-          id={`tab-${tab.id}`}
-          aria-selected={tab.id === defaultTab ? 'true' : 'false'}
-          aria-controls={`panel-${tab.id}`}
-          data-tab-trigger={tab.id}
-          class="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-slate-300 dark:border-slate-700 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-        >
-          {tab.label}
-        </button>
-      ))
-    }
+  <div class:list={['relative', fillViewport ? 'shrink-0' : '']}>
+    <div
+      role="tablist"
+      aria-label="Page sections"
+      class="tablist-scroll flex flex-nowrap gap-2 mb-6 overflow-x-auto overscroll-contain scroll-px-4"
+    >
+      {
+        tabs.map((tab) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-selected={tab.id === defaultTab ? 'true' : 'false'}
+            aria-controls={`panel-${tab.id}`}
+            data-tab-trigger={tab.id}
+            class="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-slate-300 dark:border-slate-700 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            {tab.label}
+          </button>
+        ))
+      }
+    </div>
+    <div class="tab-fade pointer-events-none absolute top-0 right-0 bottom-6 w-8 bg-gradient-to-l from-white dark:from-[#0f172a] to-transparent" />
   </div>
 
   <div class:list={[fillViewport ? 'flex-1 min-h-0 flex flex-col' : '']}>
@@ -77,19 +80,27 @@ const {
     color: #ffffff;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
   }
+
+  .tab-fade {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .tablist-scroll.has-overflow .tab-fade {
+    opacity: 1;
+  }
+  .tablist-scroll.has-overflow.scrolled-end .tab-fade {
+    opacity: 0;
+  }
 </style>
 
 <script>
   (() => {
-    const ALIAS: Record<string, string> = {};
-
     const normalize = (h: string) => (h.length > 1 ? h.slice(1) : '');
 
     const activate = (root: HTMLElement, id: string) => {
       if (!root.querySelector(`[data-tab-trigger="${id}"]`)) return;
       root.querySelectorAll<HTMLElement>('[data-tab-trigger]').forEach((trigger) => {
-        const on = trigger.dataset.tabTrigger === id;
-        trigger.setAttribute('aria-selected', String(on));
+        trigger.setAttribute('aria-selected', String(trigger.dataset.tabTrigger === id));
       });
       root.querySelectorAll<HTMLElement>('[data-tab-panel]').forEach((panel) => {
         const on = panel.dataset.tabPanel === id;
@@ -101,44 +112,98 @@ const {
     const handleHash = () => {
       const h = normalize(window.location.hash);
       if (!h) return;
-      const id = ALIAS[h] || h;
-      const target = document.getElementById(h);
-      const panel = target?.closest<HTMLElement>('[data-tab-panel]');
       document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
-        if (!root.querySelector(`[data-tab-trigger="${id}"]`)) return;
-        activate(root, id);
-        if (panel) {
-          panel.scrollTop = target.offsetTop - panel.offsetTop;
-          panel.scrollIntoView({ block: 'nearest' });
-        }
+        if (!root.querySelector(`[data-tab-trigger="${h}"]`)) return;
+        activate(root, h);
       });
     };
 
     document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
       const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab-trigger]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-tab-panel]'));
+      const scroll = root.querySelector<HTMLElement>('.tablist-scroll');
+      const fade = root.querySelector<HTMLElement>('.tab-fade');
 
+      /* --- Overflow fade --- */
+      const checkOverflow = () => {
+        if (!scroll || !fade) return;
+        const atEnd = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 4;
+        scroll.classList.toggle('scrolled-end', atEnd);
+        scroll.classList.toggle('has-overflow', scroll.scrollWidth > scroll.clientWidth + 4);
+      };
+
+      if (scroll) {
+        scroll.addEventListener('scroll', checkOverflow, { passive: true });
+        checkOverflow();
+      }
+
+      /* --- Scroll active pill into view --- */
+      const scrollActiveIntoView = (trigger: HTMLElement) => {
+        if (!scroll) return;
+        const triggerLeft = trigger.offsetLeft - scroll.offsetLeft;
+        const triggerRight = triggerLeft + trigger.offsetWidth;
+        const scrollRight = scroll.scrollLeft + scroll.clientWidth;
+        if (triggerLeft < scroll.scrollLeft) scroll.scrollTo({ left: triggerLeft - 16, behavior: 'smooth' });
+        else if (triggerRight > scrollRight) scroll.scrollTo({ left: triggerRight - scroll.clientWidth + 16, behavior: 'smooth' });
+      };
+
+      /* --- Pill clicks --- */
       triggers.forEach((trigger) => {
         trigger.addEventListener('click', () => {
           const id = trigger.dataset.tabTrigger as string;
           activate(root, id);
-          try {
-            history.replaceState(null, '', `#${id}`);
-          } catch {
-            /* ignore */
-          }
+          scrollActiveIntoView(trigger);
+          try { history.replaceState(null, '', `#${id}`); } catch { /* */ }
         });
 
         trigger.addEventListener('keydown', (event) => {
-          if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+          if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
           event.preventDefault();
           const index = triggers.indexOf(trigger);
           let next = index;
-          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % triggers.length;
-          else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + triggers.length) % triggers.length;
+          if (event.key === 'ArrowRight') next = (index + 1) % triggers.length;
+          else if (event.key === 'ArrowLeft') next = (index - 1 + triggers.length) % triggers.length;
           else if (event.key === 'Home') next = 0;
           else if (event.key === 'End') next = triggers.length - 1;
           triggers[next].focus();
           activate(root, triggers[next].dataset.tabTrigger as string);
+        });
+      });
+
+      /* --- Swipe on content panels --- */
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let swiping: boolean | null = null;
+
+      panels.forEach((panel) => {
+        panel.addEventListener('touchstart', (e) => {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          swiping = null;
+        }, { passive: true });
+
+        panel.addEventListener('touchmove', (e) => {
+          if (swiping !== null) return;
+          const dx = e.touches[0].clientX - touchStartX;
+          const dy = e.touches[0].clientY - touchStartY;
+          if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) swiping = true;
+          else if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) swiping = false;
+        }, { passive: true });
+
+        panel.addEventListener('touchend', (e) => {
+          if (swiping !== true) return;
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(dx) < 50) return;
+          const idx = triggers.findIndex((t) => t.dataset.tabTrigger === panel.dataset.tabPanel);
+          let next = idx;
+          if (dx < 0 && idx < triggers.length - 1) next = idx + 1;
+          else if (dx > 0 && idx > 0) next = idx - 1;
+          if (next !== idx) {
+            const id = triggers[next].dataset.tabTrigger as string;
+            activate(root, id);
+            scrollActiveIntoView(triggers[next]);
+            try { history.replaceState(null, '', `#${id}`); } catch { /* */ }
+          }
         });
       });
     });
