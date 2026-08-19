@@ -12,6 +12,7 @@ interface Props {
 }
 
 const { title, subtitle, items = [], classes = {} } = Astro.props;
+const accordionName = title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'blade';
 ---
 
 <div class:list={[classes?.container ?? '', 'w-full mx-auto']}>
@@ -30,6 +31,7 @@ const { title, subtitle, items = [], classes = {} } = Astro.props;
       items.map((item, index) => (
         <details
           open={index === 0}
+          name={accordionName}
           class="blade-accordion rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40 overflow-hidden"
         >
           <summary class="blade-summary flex items-center gap-2 p-3 text-sm font-semibold text-slate-800 dark:text-slate-100 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
