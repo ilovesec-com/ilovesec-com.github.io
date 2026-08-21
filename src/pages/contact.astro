@@ -1,70 +1,11 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
-import HeroText from '~/components/widgets/HeroText.astro';
-import ContactUs from '~/components/widgets/Contact.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-
-const metadata = {
-  title: 'Contact',
-};
+const metadata = { title: 'Contact' };
 ---
 
-<Layout metadata={metadata}>
-  <!-- HeroText Widget ******************* -->
-
-  <HeroText tagline="Contact" title="Let's Connect!" />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="We are here to help!"
-    items={[
-      {
-        title: 'Email',
-        description: 'info@ilovesec.com',
-        icon: 'tabler:mail',
-      },
-      {
-       icon: 'tabler:brand-linkedin',
-        callToAction: {
-          target: '_blank',
-          text: 'LinkedIn',
-          href:  'https://www.linkedin.com/in/thejoshuamorgan',
-      },
-      },
-      {
-       icon: 'tabler:brand-x',
-        callToAction: {
-          target: '_blank',
-          text: 'Twitter',
-          href:  'https://www.twitter.com/samunoskex',
-      },
-      },
-      {
-       icon: 'tabler:brand-mastodon',
-        callToAction: {
-          target: '_blank',
-          text: 'Mastodon',
-          href:  'https://infosec.exchange/@Samunoske',
-      },
-      },
-
-      {
-       icon: 'tabler:brand-bluesky',
-        callToAction: {
-          target: '_blank',
-          text: 'Bluesky',
-          href:  'https://bsky.app/profile/ilovesec.com',
-      },
-      },
-      {
-        icon: 'tabler:brand-youtube',
-        callToAction: {
-        text: 'Odysee',
-        target: '_blank',
-        href: 'https://odysee.com/@ilovesec:b',
-        },
-      },
-    ]}
-  />
-</Layout>
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0;url=/#contact" />
+    <script>window.location.replace('/#contact');</script>
+  </head>
+  <body></body>
+</html>

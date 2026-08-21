@@ -3,51 +3,49 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Home', href: '/'
+      text: 'Home', href: '/',
     },
     {
-      text: 'Contact', href: getPermalink('/contact'),
-    },
-    {
-      text: 'About', href: getPermalink('/homes/personal'),
+      text: 'About', href: '/#about',
       links: [
         {
           text: 'Bio',
-          href: getPermalink('/homes/personal/#about'),
+          href: '/#about',
         },
         {
-          text: 'Security Community Highlights',
-          href: getPermalink('/homes/personal/#highlights'),
-        },
-        {
-          text: 'Security Certifications',
-          href: getPermalink('/homes/personal/#certs'),
+          text: 'Certifications',
+          href: '/#certs',
         },
         {
           text: 'Skills',
-          href: getPermalink('/homes/personal/#skills'),
+          href: '/#skills',
+        },
+        {
+          text: 'CTFs',
+          href: '/#ctf',
         },
       ],
     },
     {
-      text: 'Content', href: getPermalink('/homes/personal'),
+      text: 'Community', href: '/#presentations',
       links: [
         {
-          text: 'Blog',
-          href: 'https://ilovesec.substack.com',
+          text: 'Talks',
+          href: '/#presentations',
         },
         {
-          text: 'Videos',
-          href: getPermalink('category/video/'),
-        },
-        {
-          text: 'SOC Tools',
-          href: 'https://github.com/samunoske/SOC-Tools',
+          text: 'Community Highlights',
+          href: '/#highlights',
         },
       ],
     },
+    {
+      text: 'Blog', href: 'https://ilovesec.substack.com',
+    },
+    {
+      text: 'Contact', href: '/#contact',
+    },
   ],
-  actions: [{ text: 'Blog', href: getBlogPermalink(), target: '_blank' }],
 };
 
 export const footerData = {
